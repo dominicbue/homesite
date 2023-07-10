@@ -1,8 +1,12 @@
 package domin.homesite.cookbook.adapterpersistence;
 
 import domin.homesite.cookbook.adapterpersistence.domain.RecipeEntity;
+import domin.homesite.cookbook.adapterpersistence.weld.WeldRunner;
 import domin.homesite.cookbook.recipemanagement.domain.Recipe;
 import lombok.AllArgsConstructor;
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.environment.se.WeldContainer;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,8 +36,12 @@ class RecipeRepositoryImplTest {
     private RecipeRepositoryImpl testee;
     private ArgumentCaptor<RecipeEntity> recipeCaptor;
 
+    @BeforeAll
+    static void init(){
+
+    }
     @BeforeEach
-    void init() {
+    void setup() {
         when(emf.createEntityManager()).thenReturn(em);
         testee = new RecipeRepositoryImpl();
         recipeCaptor = ArgumentCaptor.forClass(RecipeEntity.class);
