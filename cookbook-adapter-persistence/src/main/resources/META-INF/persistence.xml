@@ -6,10 +6,10 @@
 
     <persistence-unit name="recipemanagment" transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-        <class>domin.homesite.cookbook.adapterpersistence.domain.RecipeEntity</class>
-        <class>domin.homesite.cookbook.adapterpersistence.domain.IngredientEntity</class>
-        <class>domin.homesite.cookbook.adapterpersistence.domain.InstructionEntity</class>
-        <class>domin.homesite.cookbook.adapterpersistence.domain.CategoryEntity</class>
+        <class>domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity</class>
+        <class>domin.homesite.cookbook.adapterpersistence.domain.ingredients.IngredientEntity</class>
+        <class>domin.homesite.cookbook.adapterpersistence.domain.instructions.InstructionEntity</class>
+        <class>domin.homesite.cookbook.adapterpersistence.domain.category.CategoryEntity</class>
 
         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/recipemanagement"/>
