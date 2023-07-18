@@ -21,7 +21,7 @@ public class RecipeBuilder {
         return this;
     }
 
-    public RecipeBuilder withPicture(byte[] Picture){
+    public RecipeBuilder withPicture(byte[] recipePicture){
         this.recipePicture = recipePicture;
         return this;
     }

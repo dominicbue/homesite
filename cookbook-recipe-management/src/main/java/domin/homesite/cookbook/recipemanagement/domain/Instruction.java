@@ -9,11 +9,11 @@ import static java.util.Objects.requireNonNull;
 @Getter
 public class Instruction {
     private String instructionId;
-    private String instruction;
+    private String instructionText;
 
     public Instruction(InstructionBuilder builder) {
         this.instructionId = builder.instructionId;
-        this.instruction = requireNonNull(builder.instruction, "Instruction darf nicht null sein");
+        this.instructionText = requireNonNull(builder.instruction, "Instruction darf nicht null sein");
     }
 
 
