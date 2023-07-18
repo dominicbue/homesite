@@ -1,12 +1,8 @@
 package domin.homesite.cookbook.adapterpersistence;
 
-import domin.homesite.cookbook.adapterpersistence.domain.RecipeEntity;
-import domin.homesite.cookbook.adapterpersistence.weld.WeldRunner;
+import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity;
 import domin.homesite.cookbook.recipemanagement.domain.Recipe;
 import lombok.AllArgsConstructor;
-import org.jboss.weld.environment.se.Weld;
-import org.jboss.weld.environment.se.WeldContainer;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,8 +14,8 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-import static domin.homesite.cookbook.recipemanagement.utils.TestDataFactory.DUMMY_RECIPE_NAME;
-import static domin.homesite.cookbook.recipemanagement.utils.TestDataFactory.dummyRecipeBuilder;
+import static domin.homesite.cookbook.adapterpersistence.factories.DomainTestDataFactory.DOMAIN_RECIPE_NAME;
+import static domin.homesite.cookbook.adapterpersistence.factories.DomainTestDataFactory.dummyRecipeBuilder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -36,10 +32,6 @@ class RecipeRepositoryImplTest {
     private RecipeRepositoryImpl testee;
     private ArgumentCaptor<RecipeEntity> recipeCaptor;
 
-    @BeforeAll
-    static void init(){
-
-    }
     @BeforeEach
     void setup() {
         when(emf.createEntityManager()).thenReturn(em);
@@ -57,7 +49,7 @@ class RecipeRepositoryImplTest {
 
         //assert
         verify(em).persist(recipeCaptor.capture());
-        assertEquals(DUMMY_RECIPE_NAME, recipeCaptor.getValue().getName());
+        assertEquals(DOMAIN_RECIPE_NAME, recipeCaptor.getValue().getName());
     }
 
 

@@ -1,11 +1,11 @@
-package domin.homesite.cookbook.recipemanagement.utils;
+package domin.homesite.cookbook.recipemanagement;
 
 import domin.homesite.cookbook.recipemanagement.domain.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestDataFactory {
+public class DomainTestDataFactory {
 
     public static final String RECIPE_ID = "0";
     public static final String DUMMY_RECIPE_NAME = "Dummy Recipe";

@@ -1,16 +1,17 @@
-package domin.homesite.cookbook.adapterpersistence;
+package domin.homesite.cookbook.adapterpersistence.factories;
 
-import domin.homesite.cookbook.adapterpersistence.domain.CategoryEntity;
-import domin.homesite.cookbook.adapterpersistence.domain.IngredientEntity;
-import domin.homesite.cookbook.adapterpersistence.domain.InstructionEntity;
-import domin.homesite.cookbook.adapterpersistence.domain.RecipeEntity;
+import domin.homesite.cookbook.adapterpersistence.domain.category.CategoryEntity;
+import domin.homesite.cookbook.adapterpersistence.domain.ingredients.IngredientEntity;
+import domin.homesite.cookbook.adapterpersistence.domain.instructions.InstructionEntity;
+import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PersistenceTestDataFactory {
+public class EntityTestDataFactory {
 
-    public static final String RECIPE_ID = "0";
+    public static final String DUMMY_RECIPE_ID = "0";
+    public static final byte[] DUMMY_PICTURE = "Test".getBytes();
     public static final String DUMMY_RECIPE_NAME = "Dummy Recipe";
     public static final String INSTRUCTION_DO_THIS = "Do this.";
     public static final String INSTRUCTION_AND_THIS = "And this.";
@@ -56,7 +57,9 @@ public class PersistenceTestDataFactory {
 
     public static RecipeEntity dummyRecipeEnitity() {
         RecipeEntity recipeEntity = new RecipeEntity();
+        recipeEntity.setObject_Id(DUMMY_RECIPE_ID);
         recipeEntity.setName(DUMMY_RECIPE_NAME);
+        recipeEntity.setPicture(DUMMY_PICTURE);
         recipeEntity.setCategoryEntity(dummyCategoryEntity());
         recipeEntity.setIngredientEntities(dummyIngredientEntities());
         recipeEntity.setInstructionEntities(dummyInstructionEntities());
