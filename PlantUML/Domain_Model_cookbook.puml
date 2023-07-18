@@ -1,0 +1,47 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+Recipe "0..n" --* Category
+Recipe *-- "0..n" Instruction
+Recipe "0..n" -- "0..n" Ingredient
+Ingredient "0..n"--* IngredientUnit
+
+
+class Recipe {
+**String : recipeName**
+--
+byte[] : recipePicture 0..1
+Category : category 0..1
+List<Ingredient> : ingredients
+List<Instruction> : instructions 0..1
+}
+
+class Category {
+**String : categoryName**
+}
+
+class Ingredient {
+**String : ingredientName**
+**String : quantity**
+**IngredientUnit : unit**
+}
+
+class Instruction {
+**String : instructionText**
+}
+
+enum IngredientUnit {
+KILOGRAMM : "Kilogramm"
+GRAMM : "Gramm"
+MILLILITER : "ml"
+LITER: "l"
+TEELOEFFEL : "TL"
+ESSLOEFFEL : "EL"
+ETWAS : "etwas"
+WENIG : "wenig"
+PRISE : "eine Prise"
+STUECK : "Stk.""
+}
+
+
+@enduml
