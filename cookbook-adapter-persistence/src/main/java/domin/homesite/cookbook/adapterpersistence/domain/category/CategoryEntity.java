@@ -1,5 +1,6 @@
-package domin.homesite.cookbook.adapterpersistence.domain;
+package domin.homesite.cookbook.adapterpersistence.domain.category;
 
+import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity;
 import lombok.Data;
 
 import javax.persistence.*;

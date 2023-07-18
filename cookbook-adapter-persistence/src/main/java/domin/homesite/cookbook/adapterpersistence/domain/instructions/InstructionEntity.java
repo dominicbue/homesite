@@ -1,5 +1,6 @@
-package domin.homesite.cookbook.adapterpersistence.domain;
+package domin.homesite.cookbook.adapterpersistence.domain.instructions;
 
+import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -7,13 +8,14 @@ import javax.persistence.*;
 @Entity
 @Table(name = "INSTRUCTIONS")
 @Data
+@IdClass(InstructionEntityId.class)
 public class InstructionEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "OBJECT_OID")
     private String object_Id;
 
+    @Id
     @Column(name = "DESCRIPTION")
     private String description;
 

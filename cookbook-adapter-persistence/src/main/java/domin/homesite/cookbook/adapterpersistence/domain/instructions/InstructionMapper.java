@@ -1,4 +1,4 @@
-package domin.homesite.cookbook.adapterpersistence.domain;
+package domin.homesite.cookbook.adapterpersistence.domain.instructions;
 
 import domin.homesite.cookbook.recipemanagement.domain.Instruction;
 

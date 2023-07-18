@@ -1,8 +1,6 @@
-package domin.homesite.cookbook.adapterpersistence.domain;
+package domin.homesite.cookbook.adapterpersistence.domain.category;
 
 import domin.homesite.cookbook.recipemanagement.domain.Category;
-
-import javax.inject.Inject;
 
 public class CategoryMapper {
 

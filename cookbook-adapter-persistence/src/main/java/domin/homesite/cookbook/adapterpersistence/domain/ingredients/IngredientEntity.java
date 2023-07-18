@@ -1,5 +1,6 @@
-package domin.homesite.cookbook.adapterpersistence.domain;
+package domin.homesite.cookbook.adapterpersistence.domain.ingredients;
 
+import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "INGREDIENTS")
 @Data
+@IdClass(IngredientEntityId.class)
 public class IngredientEntity {
 
     @Id
@@ -17,9 +19,11 @@ public class IngredientEntity {
     @Column(name = "NAME")
     private String name;
 
+    @Id
     @Column(name = "QUANTITY")
     private String quantity;
 
+    @Id
     @Column(name = "UNIT")
     private String unit;
 

@@ -1,4 +1,4 @@
-package domin.homesite.cookbook.adapterpersistence.domain;
+package domin.homesite.cookbook.adapterpersistence.domain.ingredients;
 
 import domin.homesite.cookbook.recipemanagement.domain.Ingredient;
 
@@ -8,7 +8,6 @@ import javax.enterprise.context.RequestScoped;
 public class IngredientMapper {
 
     public IngredientEntity mapDomainToEntity(Ingredient ingredient, IngredientEntity entity) {
-        entity.setObject_Id(ingredient.getIngredientId());
         entity.setName(ingredient.getIngredientName());
         entity.setQuantity(ingredient.getQuantity());
         entity.setUnit(ingredient.getUnit().toString());
