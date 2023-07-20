@@ -1,0 +1,51 @@
+@startuml
+'https://plantuml.com/entity-diagram
+
+entity Recipes {
+**String : RECIPE_OID **
+--
+* String : recipeName
+byte[] : recipePicture 0..1
+Category : category 0..1
+List<Instruction> : instructions 0..n
+List<Ingredient> : ingredients 0..n
+}
+
+entity Categories {
+**String : CATEGORY_OID**
+--
+* String : categoryName
+}
+
+entity Ingredients {
+**String : INGREDIENT_OID**
+--
+*String : ingredientName
+*IngredientUnit : unit
+String : quantity
+List<Recipe> : recipes 0..n
+}
+
+entity Instructions {
+**String : INSTRUCTION_OID**
+--
+*String : instructionText
+List<Recipe> : recipes 0..n
+}
+
+entity RecipeInstructions {
+**String : RECIPE_OID**
+**String : INSTRUCTION_OID**
+}
+
+entity RecipeIngredients {
+**String : RECIPE_ID**
+**String : INGREDIENT_ID**
+}
+
+Recipes }o--o| Categories
+Recipes ||--o{ RecipeIngredients
+Ingredients ||--o{ RecipeIngredients
+Recipes ||--o{ RecipeInstructions
+Instructions ||--o{ RecipeInstructions
+@enduml
