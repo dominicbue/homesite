@@ -15,28 +15,36 @@ import java.util.List;
 @Entity
 @NamedQuery(name = "TEST", query = "SELECT r FROM RecipeEntity r")
 @Table(name = "RECIPES")
-@IdClass(RecipeEntityId.class)
 public class RecipeEntity {
 
     @Id
-    @Column(name = "OBJECT_OID")
-    private String object_Id;
-    @Column(name = "RECIPE_NAME")
+    @Column(name = "RECIPE_OID")
+    private String recipe_id;
+    @Column(name = "RECIPE_NAME", unique = true)
     private String name;
     @Lob
     @Column(name = "PICTURE", length = 100000)
     private byte[] picture;
 
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "CATEGORY_OID", referencedColumnName = "OBJECT_OID", insertable = false, updatable = false)
-    private CategoryEntity categoryEntity = new CategoryEntity();
+    @Column(name = "CATEGORY_OID")
+    private String category_id;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "recipe")
-    @Column(name = "INGREDIENT_OID")
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "CATEGORY_OID", referencedColumnName = "CATEGORY_OID", insertable = false, updatable = false)
+    private CategoryEntity categoryEntity;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @Column(name = "INGREDIENT_ID")
+    @JoinTable(name = "RECIPE_INGREDIENTS",
+            joinColumns = @JoinColumn(name = "RECIPE_OID"),
+            inverseJoinColumns = @JoinColumn(name = "INGREDIENT_OID"))
     private List<IngredientEntity> ingredientEntities = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "recipe")
-    @Column(name = "INSTRUCTION_OID")
-    private List<InstructionEntity> instructionEntities  = new ArrayList<>();
+    @ManyToMany(cascade = CascadeType.ALL)
+    @Column(name = "INSTRUCTION_ID")
+    @JoinTable(name = "RECIPE_INSTRUCTIONS",
+            joinColumns = @JoinColumn(name = "RECIPE_OID"),
+            inverseJoinColumns = @JoinColumn(name = "INSTRUCTION_OID"))
+    private List<InstructionEntity> instructionEntities = new ArrayList<>();
 
 }

@@ -4,6 +4,7 @@ import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity
@@ -13,14 +14,14 @@ public class CategoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "OBJECT_OID")
-    private String object_Id;
+    @Column(name = "CATEGORY_OID")
+    private String category_Id;
 
     @Column(name = "NAME")
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "RECIPE_OID")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "categoryEntity")
     @Column(name = "RECIPE_OID")
-    private RecipeEntity recipe;
+    private List<RecipeEntity> recipes;
 
 }
