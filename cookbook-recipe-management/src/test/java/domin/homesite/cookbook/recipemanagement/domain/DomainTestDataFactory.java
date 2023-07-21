@@ -1,6 +1,4 @@
-package domin.homesite.cookbook.recipemanagement;
-
-import domin.homesite.cookbook.recipemanagement.domain.*;
+package domin.homesite.cookbook.recipemanagement.domain;
 
 import java.util.ArrayList;
 import java.util.List;
