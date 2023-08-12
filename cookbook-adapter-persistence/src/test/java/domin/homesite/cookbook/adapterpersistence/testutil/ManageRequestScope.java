@@ -1,4 +1,4 @@
-package domin.homesite.cookbook.adapterpersistence.weld;
+package domin.homesite.cookbook.adapterpersistence.testutil;
 
 import org.jboss.weld.context.bound.BoundRequestContext;
 import org.jboss.weld.environment.se.WeldContainer;
