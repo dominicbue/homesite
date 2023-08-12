@@ -12,20 +12,19 @@ import java.util.List;
 public class IngredientEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "INGREDIENT_OID")
-    private String object_Id;
+    private String ingredient_oid;
 
-    @Column(name = "NAME")
+    @Column(name = "NAME", nullable = false)
     private String name;
 
     @Column(name = "QUANTITY")
     private String quantity;
 
-    @Column(name = "UNIT")
+    @Column(name = "UNIT", nullable = false)
     private String unit;
 
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, mappedBy = "ingredientEntities")
-    @Column(name = "RECIPE_INGREDIENT_ID")
+    @JoinColumn(name = "RECIPE_INGREDIENT_ID")
     private List<RecipeEntity> recipe;
 }

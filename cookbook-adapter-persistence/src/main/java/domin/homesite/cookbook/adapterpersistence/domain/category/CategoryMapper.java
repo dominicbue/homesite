@@ -4,9 +4,11 @@ import domin.homesite.cookbook.recipemanagement.domain.Category;
 
 public class CategoryMapper {
 
-    public CategoryEntity mapDomainToEntity(Category category, CategoryEntity entity) {
-        entity.setObject_Id(category.getCategoryId());
+    public void mapDomainToEntity(Category category, CategoryEntity entity) {
         entity.setName(category.getCategoryName());
-        return entity;
+
+        if(entity.getCategory_oid() == null){
+            entity.setCategory_oid(category.getCategoryId());
+        }
     }
 }

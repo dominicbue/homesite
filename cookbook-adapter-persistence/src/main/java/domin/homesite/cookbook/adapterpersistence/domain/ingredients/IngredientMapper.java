@@ -7,11 +7,16 @@ import javax.enterprise.context.RequestScoped;
 @RequestScoped
 public class IngredientMapper {
 
-    public IngredientEntity mapDomainToEntity(Ingredient ingredient, IngredientEntity entity) {
+    public void mapDomainToEntity(Ingredient ingredient, IngredientEntity entity) {
         entity.setName(ingredient.getIngredientName());
-        entity.setQuantity(ingredient.getQuantity());
         entity.setUnit(ingredient.getUnit().toString());
-        return entity;
+
+        if(ingredient.getQuantity() != null) {
+            entity.setQuantity(ingredient.getQuantity());
+        }
+        if(ingredient.getIngredientId() != null){
+            entity.setIngredient_oid(ingredient.getIngredientId());
+        }
     }
 }
 

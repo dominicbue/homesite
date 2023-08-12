@@ -7,9 +7,11 @@ import javax.enterprise.context.RequestScoped;
 @RequestScoped
 public class InstructionMapper {
 
-    public InstructionEntity mapDomainToEntity(Instruction instruction, InstructionEntity entity) {
-        entity.setObject_Id(instruction.getInstructionId());
+    public void mapDomainToEntity(Instruction instruction, InstructionEntity entity) {
         entity.setDescription(instruction.getInstructionText());
-        return entity;
+
+        if(instruction.getInstructionId() != null) {
+            entity.setInstruction_id(instruction.getInstructionId());
+        }
     }
 }

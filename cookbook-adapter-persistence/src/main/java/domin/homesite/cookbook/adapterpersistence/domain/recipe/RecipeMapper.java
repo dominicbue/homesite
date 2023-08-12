@@ -10,23 +10,21 @@ import domin.homesite.cookbook.recipemanagement.domain.Ingredient;
 import domin.homesite.cookbook.recipemanagement.domain.Instruction;
 import domin.homesite.cookbook.recipemanagement.domain.Recipe;
 
-import javax.inject.Inject;
 import java.util.List;
-
 
 public class RecipeMapper {
 
-    @Inject
-    private CategoryMapper categoryMapper;
-    @Inject
-    private IngredientMapper ingredientMapper;
-    @Inject
-    private InstructionMapper instructionMapper;
+    public static final int NONE_EQUAL_ENTITY = -1;
+    private final CategoryMapper categoryMapper = new CategoryMapper();
+    private final IngredientMapper ingredientMapper = new IngredientMapper();
+    private final InstructionMapper instructionMapper = new InstructionMapper();
 
     public void mapDomainToEntity(Recipe recipe, RecipeEntity entity) {
         entity.setName(recipe.getRecipeName());
-        entity.setObject_Id(recipe.getRecipeId());
 
+        if (entity.getRecipe_id() == null) {
+            entity.setRecipe_id(recipe.getRecipeId());
+        }
         if (recipe.getRecipePicture() != null) {
             entity.setPicture(recipe.getRecipePicture());
         }
@@ -50,19 +48,51 @@ public class RecipeMapper {
         for (Ingredient ingredient : ingredients) {
             IngredientEntity temporaryIngredientEntity = new IngredientEntity();
             ingredientMapper.mapDomainToEntity(ingredient, temporaryIngredientEntity);
-            entity.getIngredientEntities().add(temporaryIngredientEntity);
+            int index = this.getIndexOfExistingIngredientEntity(entity.getIngredientEntities(), ingredient.getIngredientId());
+            if (index == NONE_EQUAL_ENTITY) {
+                entity.getIngredientEntities().add(temporaryIngredientEntity);
+            } else {
+                mergeExistingEntity(entity.getIngredientEntities(), temporaryIngredientEntity, index);
+            }
         }
+    }
+
+    private int getIndexOfExistingIngredientEntity(List<IngredientEntity> ingredientEntities, String ingredientId) {
+        for (int i = 0; i < ingredientEntities.size(); i++) {
+            if (ingredientEntities.get(i).getIngredient_oid().equals(ingredientId)) {
+                return i;
+            }
+        }
+        return NONE_EQUAL_ENTITY;
     }
 
     private void addInstructionsToEntity(List<Instruction> instructions, RecipeEntity entity) {
         for (Instruction instruction : instructions) {
             InstructionEntity temporaryInstructionEntity = new InstructionEntity();
             instructionMapper.mapDomainToEntity(instruction, temporaryInstructionEntity);
-            entity.getInstructionEntities().add(temporaryInstructionEntity);
+            int index = getIndexOfExistingInstructionEntity(entity.getInstructionEntities(), instruction.getInstructionId());
+            if (index == NONE_EQUAL_ENTITY) {
+                entity.getInstructionEntities().add(temporaryInstructionEntity);
+            } else {
+                mergeExistingEntity(entity.getInstructionEntities(), temporaryInstructionEntity, index);
+            }
         }
     }
 
-    public Recipe mapEntityToDomain(RecipeEntity entity, Recipe recipe) {
+    private int getIndexOfExistingInstructionEntity(List<InstructionEntity> instructionEntities, String instructionId) {
+        for (int i = 0; i < instructionEntities.size(); i++) {
+            if (instructionEntities.get(i).getInstruction_id().equals(instructionId)) {
+                return i;
+            }
+        }
+        return NONE_EQUAL_ENTITY;
+    }
+
+    private <T> void mergeExistingEntity(List<T> entities, T temporaryEntity, int index) {
+        entities.set(index, temporaryEntity);
+    }
+
+    public Recipe mapEntityToDomain(RecipeEntity entity) {
         return null;
     }
 }

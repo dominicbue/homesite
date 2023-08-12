@@ -4,6 +4,7 @@ import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "INSTRUCTIONS")
@@ -12,12 +13,12 @@ public class InstructionEntity {
 
     @Id
     @Column(name = "INSTRUCTION_OID")
-    private String object_Id;
+    private String instruction_id;
 
-    @Column(name = "DESCRIPTION")
+    @Column(name = "DESCRIPTION", nullable = false, unique = true)
     private String description;
 
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, mappedBy = "instructionEntities")
-    @Column(name = "RECIPE_INSTRUCTION_ID")
-    private RecipeEntity recipe;
+    @JoinColumn(name = "RECIPE_INSTRUCTION_ID")
+    private List<RecipeEntity> recipe;
 }

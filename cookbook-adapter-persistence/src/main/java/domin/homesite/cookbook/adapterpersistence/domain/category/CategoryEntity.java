@@ -13,15 +13,14 @@ import java.util.List;
 public class CategoryEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CATEGORY_OID")
-    private String category_Id;
+    private String category_oid;
 
-    @Column(name = "NAME")
+    @Column(name = "NAME", unique = true, nullable = false)
     private String name;
 
+    @JoinColumn(name = "RECIPE_OID")
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "categoryEntity")
-    @Column(name = "RECIPE_OID")
     private List<RecipeEntity> recipes;
 
 }

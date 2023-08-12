@@ -6,43 +6,45 @@ import domin.homesite.cookbook.recipemanagement.domain.Recipe;
 import domin.homesite.cookbook.recipemanagement.gateway.IRecipeRepository;
 import lombok.NonNull;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-@PersistenceContext(name = "recipemanagment")
-public class RecipeRepositoryImpl implements IRecipeRepository {
+import static domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity.PARAMETER_RECIPE_NAME;
+import static domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity.SEARCH_RECIPE_WITH_NAME;
 
-    private final EntityManager em;
-    private final EntityManagerFactory emf;
+public class RecipeRepositoryImpl extends AbstractRepository<RecipeEntity> implements IRecipeRepository {
 
-    @Inject
-    private RecipeMapper recipeMapper;
+    private final RecipeMapper recipeMapper;
 
-    public RecipeRepositoryImpl() {
-        emf = Persistence.createEntityManagerFactory("recipemanagement");
-        em = emf.createEntityManager();
+    public RecipeRepositoryImpl(RecipeMapper recipeMapper) {
+        this.recipeMapper = recipeMapper;
     }
 
-    @Override
     public void upsertRecipe(@NonNull Recipe recipe) {
         //Todo:
-        RecipeEntity entity;
-        if (recipe.getRecipeId() == null) {
-            entity =  new RecipeEntity();
-        } else {
-            entity = em.find(RecipeEntity.class, recipe.getRecipeId());
+        RecipeEntity entity = new RecipeEntity();
+        Optional<RecipeEntity> optional = find(RecipeEntity.class, recipe.getRecipeId());
+        boolean updateEntity = false;
+        if (optional.isPresent()) {
+            entity = optional.get();
+            updateEntity = true;
         }
         recipeMapper.mapDomainToEntity(recipe, entity);
-        em.persist(entity);
+        persist(entity, updateEntity);
     }
 
-    @Override
+    public List<Recipe> searchRecipeByName(@NonNull String recipeName) {
+        final TypedQuery<RecipeEntity> query = createNamedQuery(SEARCH_RECIPE_WITH_NAME, RecipeEntity.class);
+        query.setParameter(PARAMETER_RECIPE_NAME, recipeName);
+        return query.getResultStream()
+                .map(recipeMapper::mapEntityToDomain)
+                .collect(Collectors.toList());
+    }
+
     public List<Recipe> readAllRecipes() {
-     return Collections.emptyList();
+        return Collections.emptyList();
     }
 }
