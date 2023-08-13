@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+    <CATEGORIES
+            CATEGORY_OID = "Cat01"
+            NAME = "Dummy Category"
+    />
+    <RECIPES
+            RECIPE_OID = "Rec0"
+            RECIPE_NAME = "Recipe Test"
+            CATEGORY_ID = "Cat01"
+    />
+    <INGREDIENTS
+            INGREDIENT_OID = "Ing01"
+            NAME = "Test Apfel dbUnit"
+            QUANTITY = "4"
+            UNIT = "Stk."
+    />
+    <INSTRUCTIONS
+            INSTRUCTION_OID = "Ins01"
+            DESCRIPTION = "Do this."
+    />
+    <RECIPE_INSTRUCTIONS
+            RECIPE_OID = "Rec0"
+            INSTRUCTION_OID = "Ins01"
+    />
+    <RECIPE_INGREDIENTS
+            RECIPE_OID = "Rec0"
+            INGREDIENT_OID = "Ing01"
+    />
+</dataset>

@@ -4,21 +4,23 @@
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
    http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 
-    <persistence-unit name="test" transaction-type="RESOURCE_LOCAL">
-        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    <persistence-unit name="repositoryTest" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <class>domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity</class>
         <class>domin.homesite.cookbook.adapterpersistence.domain.ingredients.IngredientEntity</class>
         <class>domin.homesite.cookbook.adapterpersistence.domain.instructions.InstructionEntity</class>
         <class>domin.homesite.cookbook.adapterpersistence.domain.category.CategoryEntity</class>
 
         <properties>
-            <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"/>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:default;MODE=LEGACY;DB_CLOSE_DELAY=-1"/>
             <property name="javax.persistence.jdbc.user" value="root"/>
             <property name="javax.persistence.jdbc.password" value="root"/>
             <!-- Creating the Oracle Datasource for your application  -->
-            <property name="eclipselink.ddl-generation" value="create-tables"/>
-            <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+            <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+            <property name="eclipselink.create-ddl-jdbc-file-name" value="createDDL_ddlGeneration.jdbc"/>
+            <property name="eclipselink.drop-ddl-jdbc-file-name" value="dropDDL_ddlGeneration.jdbc"/>
+            <property name="eclipselink.ddl-generation.output-mode" value="both"/>
             <property name="eclipselink.logging.level" value="SEVERE"/>
             <!-- Make sure to update these values with your database information -->
         </properties>
