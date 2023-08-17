@@ -24,6 +24,6 @@ public class Recipe {
     this.instructions = builder.recipeInstructions;
     this.recipePicture = builder.recipePicture;
     this.category = builder.category;
-    this.ingredients = requireNonNull(builder.ingredients, "Ingredients darf nicht null sein");
+    this.ingredients = builder.ingredients;
     }
 }

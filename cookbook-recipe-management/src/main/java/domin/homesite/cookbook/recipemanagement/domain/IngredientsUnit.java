@@ -17,7 +17,7 @@ public enum IngredientsUnit {
 
     IngredientsUnit(String value) {this.value = value; }
 
-    public IngredientsUnit fromValue(String value){
+    public static IngredientsUnit fromValue(String value){
         for(IngredientsUnit unit : values()){
             if(unit.value.equals(value)){
                 return unit;

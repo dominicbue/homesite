@@ -8,7 +8,7 @@ public interface IRecipeRepository {
 
     void upsertRecipe(Recipe recipe);
 
-    List<Recipe> readAllRecipes();
+    List<Recipe> searchRecipeByName(String recipeName);
 
 
 }
