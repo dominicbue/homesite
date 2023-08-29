@@ -3,7 +3,7 @@ package domin.homesite.cookbook.recipemanagement.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
 
@@ -14,9 +14,9 @@ public class Recipe {
     private String recipeId;
     private String recipeName;
     private byte[] recipePicture;
-    private List<Instruction> instructions;
+    private Set<Instruction> instructions;
     private Category category;
-    private List<Ingredient> ingredients;
+    private Set<Ingredient> ingredients;
 
     public Recipe(RecipeBuilder builder) {
     this.recipeId = requireNonNull(builder.recipeId, "RecipeId darf nicht null sein");

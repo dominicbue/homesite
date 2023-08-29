@@ -1,15 +1,15 @@
 package domin.homesite.cookbook.recipemanagement.domain;
 
-import java.util.List;
+import java.util.Set;
 
 public class RecipeBuilder {
 
     String recipeId;
     String recipeName;
     byte[] recipePicture;
-    List<Instruction> recipeInstructions;
+    Set<Instruction> recipeInstructions;
     Category category;
-    List<Ingredient> ingredients;
+    Set<Ingredient> ingredients;
 
     public RecipeBuilder withRecipeId(String id){
         this.recipeId = id;
@@ -26,7 +26,7 @@ public class RecipeBuilder {
         return this;
     }
 
-    public RecipeBuilder withInstructions(List<Instruction> instructions){
+    public RecipeBuilder withInstructions(Set<Instruction> instructions){
         this.recipeInstructions = instructions;
         return this;
     }
@@ -36,7 +36,7 @@ public class RecipeBuilder {
         return this;
     }
 
-    public RecipeBuilder withIngredients(List<Ingredient> ingredients){
+    public RecipeBuilder withIngredients(Set<Ingredient> ingredients){
         this.ingredients = ingredients;
         return this;
     }
