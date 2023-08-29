@@ -16,10 +16,7 @@ public abstract class AbstractRepository<E> {
         this.em = entityManager;
     }
 
-    protected void persist(E persistenceObject, Boolean updateEntity) {
-        if(updateEntity) {
-            em.merge(persistenceObject);
-        }
+    protected void persist(E persistenceObject) {
         em.persist(persistenceObject);
     }
 

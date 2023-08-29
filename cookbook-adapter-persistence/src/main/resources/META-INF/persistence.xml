@@ -10,6 +10,7 @@
         <class>domin.homesite.cookbook.adapterpersistence.domain.ingredients.IngredientEntity</class>
         <class>domin.homesite.cookbook.adapterpersistence.domain.instructions.InstructionEntity</class>
         <class>domin.homesite.cookbook.adapterpersistence.domain.category.CategoryEntity</class>
+        <shared-cache-mode>NONE</shared-cache-mode>
 
         <properties>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/recipemanagement"/>
