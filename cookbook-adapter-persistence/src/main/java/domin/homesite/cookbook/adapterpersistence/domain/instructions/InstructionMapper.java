@@ -1,6 +1,7 @@
 package domin.homesite.cookbook.adapterpersistence.domain.instructions;
 
 import domin.homesite.cookbook.recipemanagement.domain.Instruction;
+import domin.homesite.cookbook.recipemanagement.domain.InstructionBuilder;
 
 import javax.enterprise.context.RequestScoped;
 
@@ -13,5 +14,12 @@ public class InstructionMapper {
         if(instruction.getInstructionId() != null) {
             entity.setInstruction_id(instruction.getInstructionId());
         }
+    }
+
+    public Instruction mapEntityToDomain(InstructionEntity entity) {
+        return  new InstructionBuilder()
+                .withInstructionId(entity.getInstruction_id())
+                .withInstruction(entity.getDescription())
+                .build();
     }
 }

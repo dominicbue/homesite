@@ -4,13 +4,23 @@ import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
+import static domin.homesite.cookbook.adapterpersistence.domain.category.CategoryEntity.COUNT_CATEGORIES;
+import static domin.homesite.cookbook.adapterpersistence.domain.category.CategoryEntity.TABLENAME;
 
+@MappedSuperclass
 @Entity
-@Table(name = "CATEGORIES")
+@Table(name = TABLENAME)
 @Data
+@NamedQueries(
+        @NamedQuery(name = COUNT_CATEGORIES,
+                query = "SELECT count(c) FROM CategoryEntity c")
+)
 public class CategoryEntity {
+
+    public static final String TABLENAME = "CATEGORIES";
+    public static final String COUNT_CATEGORIES= "countCategories";
 
     @Id
     @Column(name = "CATEGORY_OID")
@@ -19,8 +29,7 @@ public class CategoryEntity {
     @Column(name = "NAME", unique = true, nullable = false)
     private String name;
 
-    @JoinColumn(name = "RECIPE_OID")
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "categoryEntity")
-    private List<RecipeEntity> recipes;
+    @OneToMany(mappedBy = "categoryEntity")
+    private Set<RecipeEntity> recipes;
 
 }

@@ -2,14 +2,21 @@ package domin.homesite.cookbook.adapterpersistence.domain.instructions;
 
 import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity;
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
+import static domin.homesite.cookbook.adapterpersistence.domain.instructions.InstructionEntity.TABLENAME;
+
+@MappedSuperclass
+@ToString
 @Entity
-@Table(name = "INSTRUCTIONS")
+@Table(name = TABLENAME)
 @Data
 public class InstructionEntity {
+
+    public static final String TABLENAME = "INSTRUCTIONS";
 
     @Id
     @Column(name = "INSTRUCTION_OID")
@@ -18,7 +25,6 @@ public class InstructionEntity {
     @Column(name = "DESCRIPTION", nullable = false, unique = true)
     private String description;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, mappedBy = "instructionEntities")
-    @JoinColumn(name = "RECIPE_INSTRUCTION_ID")
-    private List<RecipeEntity> recipe;
+    @ManyToMany(mappedBy = "instructionEntities")
+    private Set<RecipeEntity> recipe;
 }

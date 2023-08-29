@@ -7,22 +7,21 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
-import static domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity.PARAMETER_RECIPE_NAME;
-import static domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity.SEARCH_RECIPE_WITH_NAME;
+import static domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity.*;
 
+@MappedSuperclass
 @Getter
 @Setter
 @Entity
-@Table(name = "RECIPES")
+@Table(name = TABLENAME)
 @NamedQueries(
         @NamedQuery(name = SEARCH_RECIPE_WITH_NAME,
                 query = "SELECT r FROM RecipeEntity r WHERE r.name = :" + PARAMETER_RECIPE_NAME)
 )
 public class RecipeEntity {
-
+    public static final String TABLENAME = "RECIPES";
     public static final String SEARCH_RECIPE_WITH_NAME = "searchRecipeWithName";
     public static final String PARAMETER_RECIPE_NAME = "name";
 
@@ -35,20 +34,20 @@ public class RecipeEntity {
     @Column(name = "PICTURE", length = 100000)
     private byte[] picture;
 
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-    @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "CATEGORY_OID", insertable = false, updatable = false)
-    private CategoryEntity categoryEntity = new CategoryEntity();
+    @ManyToOne()
+    @JoinColumn(name = "CATEGORY_ID", nullable = false)
+    private CategoryEntity categoryEntity;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinTable(name = "RECIPE_INGREDIENTS",
             joinColumns = @JoinColumn(name = "RECIPE_OID"),
             inverseJoinColumns = @JoinColumn(name = "INGREDIENT_OID"))
-    private List<IngredientEntity> ingredientEntities = new ArrayList<>();
+    private Set<IngredientEntity> ingredientEntities;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "RECIPE_INSTRUCTIONS",
             joinColumns = @JoinColumn(name = "RECIPE_OID"),
             inverseJoinColumns = @JoinColumn(name = "INSTRUCTION_OID"))
-    private List<InstructionEntity> instructionEntities = new ArrayList<>();
+    private Set<InstructionEntity> instructionEntities;
 
 }
