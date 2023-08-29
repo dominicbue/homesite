@@ -4,19 +4,43 @@ import domin.homesite.cookbook.adapterpersistence.AbstractRepositoryTest;
 import domin.homesite.cookbook.adapterpersistence.RecipeRepositoryImpl;
 import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity;
 import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeMapper;
-import domin.homesite.cookbook.recipemanagement.domain.Recipe;
+import domin.homesite.cookbook.recipemanagement.domain.*;
 import org.dbunit.DatabaseUnitException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.persistence.Query;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import static domin.homesite.cookbook.recipemanagement.domain.DomainTestDataFactory.*;
+import static domin.homesite.cookbook.adapterpersistence.domain.category.CategoryEntity.COUNT_CATEGORIES;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RecipeRepositoryImplTest extends AbstractRepositoryTest {
 
+    public static final String RECIPE_NAME_INITIAL_DB_UNIT = "RecipeName initial dbUnit";
+    public static final String RECIPE_ID_INITIAL_DB_UNIT = "dbUnitRec01";
+    public static final String INITIAL_DBUNIT_XML = "dbunit_recipes_initial_data.xml";
+    public static final String CATEGORY_ID_INITIAL_DB_UNIT = "dbUnitCat1";
+    public static final String CATEGORY_NAME_INITIAL_DB_UNIT = "Category aus dbUnit";
+    public static final String RECIPE_ID_EXTRA = "new";
+    public static final String RECIPE_NAME_EXTRA = "new Recipe";
+    public static final String INSTRUCTION_ID_INITIAL_DB_UNIT = "Ins01";
+    public static final String INSTRUCTION_TEXT_INITIAL_DB_UNIT = "Do this for dbUnit.";
+    public static final IngredientsUnit INGREDIENTS_UNIT_INITIAL_DB_UNIT = IngredientsUnit.STUECK;
+    public static final String INGREDIENT_ID_INITIAL_DB_UNIT = "Ing01";
+    public static final String INGREDIENT_NAME_INITIAL_DB_UNIT = "Test Apfel";
+    public static final String INGREDIENT_QUANTITY_INITIAL_DB_UNIT = "4";
+    public static final String INGREDIENT_ID_EXTRA_INGEXTRA = "IngExtra";
+    public static final String INGREDIENT_QUANTITY_EXTRA_400 = "400";
+    public static final IngredientsUnit INGREDIENTS_UNIT_EXTRA_GRAMM = IngredientsUnit.GRAMM;
+    private static final String INGREDIENT_NAME_EXTRA_MEHL = "Test Mehl";
+    private static final String INSTRUCTION_ID_EXTRA = "InsExtra";
+    private static final String INSTRUCTION_TEXT_EXTRA = "Do this Extra";
     private RecipeRepositoryImpl testee;
 
     @BeforeEach
@@ -25,22 +49,55 @@ class RecipeRepositoryImplTest extends AbstractRepositoryTest {
         testee = new RecipeRepositoryImpl(recipeMapper);
         injectEntityManagerToClass(testee);
     }
-    @Test
-    void upsertRecipe_when_newRecipeWithNewName_then_noExceptionThrown() {
-        //arrange
-        Recipe expectedRecipe = dummyRecipeBuilder().build();
 
-        //act + assert
+    @Test
+    void upsertRecipe_when_newRecipeWithNewNameAndSameCategory_then_noExceptionThrown() throws SQLException, DatabaseUnitException, IOException {
+        //arrange
+        importDbUnitFile(INITIAL_DBUNIT_XML);
+        Category category = new CategoryBuilder()
+                .withCategoryId(CATEGORY_ID_INITIAL_DB_UNIT)
+                .withCategoryName(CATEGORY_NAME_INITIAL_DB_UNIT)
+                .build();
+
+        Recipe expectedRecipe = new RecipeBuilder()
+                .withRecipeId(RECIPE_ID_EXTRA)
+                .withRecipeName(RECIPE_NAME_EXTRA)
+                .withCategory(category)
+                .build();
+
+        //act
         transactionBegin();
         testee.upsertRecipe(expectedRecipe);
         transactionCommit();
+
+        //assert
+        RecipeEntity dbUnitInitialized = em.find(RecipeEntity.class, RECIPE_ID_INITIAL_DB_UNIT);
+        RecipeEntity upserted = em.find(RecipeEntity.class, RECIPE_ID_EXTRA);
+
+        assertEquals(CATEGORY_ID_INITIAL_DB_UNIT, dbUnitInitialized.getCategoryEntity().getCategory_oid());
+        assertEquals(RECIPE_NAME_INITIAL_DB_UNIT, dbUnitInitialized.getName());
+        assertEquals(CATEGORY_ID_INITIAL_DB_UNIT, upserted.getCategoryEntity().getCategory_oid());
+        assertEquals(RECIPE_NAME_EXTRA, upserted.getName());
+
+        Query categoryCountQuery = em.createNamedQuery(COUNT_CATEGORIES);
+        int persistedCategories = categoryCountQuery.getSingleResult().hashCode();
+        assertEquals(1, persistedCategories);
     }
 
     @Test
-    void upsertRecipe_when_recipeWithSameIdInDbAndOtherInstructions_then_upsertRecipeWithIdOfDbAndDataFromRecipe() throws SQLException, DatabaseUnitException, IOException {
+    void upsertRecipe_when_recipeWithSameIdButOtherName_then_upsertRecipeWithIdOfDbAndDataFromRecipe() throws SQLException, DatabaseUnitException, IOException {
         //arrange
-        importDbUnitFile("dbunit_dummyRecipe.xml");
-        Recipe expectedRecipe = dummyRecipeBuilder().build();
+        importDbUnitFile(INITIAL_DBUNIT_XML);
+        Category category = new CategoryBuilder()
+                .withCategoryId(CATEGORY_ID_INITIAL_DB_UNIT)
+                .withCategoryName(CATEGORY_NAME_INITIAL_DB_UNIT)
+                .build();
+
+        Recipe expectedRecipe = new RecipeBuilder()
+                .withRecipeId(RECIPE_ID_INITIAL_DB_UNIT)
+                .withRecipeName(RECIPE_NAME_EXTRA)
+                .withCategory(category)
+                .build();
 
         //act
         transactionBegin();
@@ -49,23 +106,137 @@ class RecipeRepositoryImplTest extends AbstractRepositoryTest {
 
         //assert
         transactionBegin();
-        RecipeEntity upsertedEntity = em.find(RecipeEntity.class, RECIPE_ID);
+        RecipeEntity upsertedEntity = em.find(RecipeEntity.class, RECIPE_ID_INITIAL_DB_UNIT);
         transactionCommit();
 
-        assertEquals(RECIPE_ID, upsertedEntity.getRecipe_id());
-        assertEquals(2, upsertedEntity.getInstructionEntities().size());
-        assertEquals(INSTRUCTION_ID_INS01, upsertedEntity.getInstructionEntities().get(0).getInstruction_id());
-        assertEquals(INSTRUCTION_DO_THIS, upsertedEntity.getInstructionEntities().get(0).getDescription());
-        assertEquals(INSTRUCTION_ID_INS02, upsertedEntity.getInstructionEntities().get(1).getInstruction_id());
-        assertEquals(INSTRUCTION_AND_THIS, upsertedEntity.getInstructionEntities().get(1).getDescription());
-        assertEquals(DUMMY_CATEGORIE_NAME, upsertedEntity.getCategoryEntity().getName());
-        assertEquals(2, upsertedEntity.getIngredientEntities().size());
-        assertEquals(INGREDIENT_APFEL, upsertedEntity.getIngredientEntities().get(0).getName());
-        assertEquals(INGREDIENT_MEHL, upsertedEntity.getIngredientEntities().get(1).getName());
+        assertEquals(RECIPE_ID_INITIAL_DB_UNIT, upsertedEntity.getRecipe_id());
+        assertEquals(RECIPE_NAME_EXTRA, expectedRecipe.getRecipeName());
+        assertEquals(CATEGORY_NAME_INITIAL_DB_UNIT, upsertedEntity.getCategoryEntity().getName());
+        assertEquals(1, upsertedEntity.getInstructionEntities().size());
+        assertTrue(upsertedEntity.getInstructionEntities().stream().anyMatch(e -> e.getInstruction_id().equals(INSTRUCTION_ID_INITIAL_DB_UNIT)));
+        assertTrue(upsertedEntity.getInstructionEntities().stream().anyMatch(e -> e.getDescription().equals(INSTRUCTION_TEXT_INITIAL_DB_UNIT)));
+        assertEquals(1, upsertedEntity.getIngredientEntities().size());
+        assertTrue(upsertedEntity.getIngredientEntities().stream().anyMatch(e -> e.getName().equals(INGREDIENT_NAME_INITIAL_DB_UNIT)));
+        assertTrue(upsertedEntity.getIngredientEntities().stream().anyMatch(e -> e.getIngredient_oid().equals(INGREDIENT_ID_INITIAL_DB_UNIT)));
+    }
+
+    @Test
+    void upsertRecipe_when_recipeIdenticButWithExtraIngredient_then_addNewIngredient() throws SQLException, DatabaseUnitException, IOException {
+        //arrange
+        importDbUnitFile(INITIAL_DBUNIT_XML);
+        Ingredient ingredientInitial = new IngredientBuilder()
+                .withIngredientId(INGREDIENT_ID_INITIAL_DB_UNIT)
+                .withIngredientName(INGREDIENT_NAME_INITIAL_DB_UNIT)
+                .withQuantity(INGREDIENT_QUANTITY_INITIAL_DB_UNIT)
+                .withIngredientsUnit(INGREDIENTS_UNIT_INITIAL_DB_UNIT)
+                .build();
+        Ingredient ingredientExtra = new IngredientBuilder()
+                .withIngredientId(INGREDIENT_ID_EXTRA_INGEXTRA)
+                .withIngredientName(INGREDIENT_NAME_EXTRA_MEHL)
+                .withQuantity(INGREDIENT_QUANTITY_EXTRA_400)
+                .withIngredientsUnit(INGREDIENTS_UNIT_EXTRA_GRAMM)
+                .build();
+        Set<Ingredient> ingredients = new HashSet<>();
+        ingredients.add(ingredientInitial);
+        ingredients.add(ingredientExtra);
+
+        Recipe expectedRecipe = new RecipeBuilder()
+                .withRecipeId(RECIPE_ID_INITIAL_DB_UNIT)
+                .withRecipeName(RECIPE_NAME_INITIAL_DB_UNIT)
+                .withIngredients(ingredients)
+                .build();
+
+        //act
+        transactionBegin();
+        testee.upsertRecipe(expectedRecipe);
+        transactionCommit();
+
+        //assert
+        RecipeEntity upsertedRecipe = em.find(RecipeEntity.class, RECIPE_ID_INITIAL_DB_UNIT);
+        assertEquals(RECIPE_NAME_INITIAL_DB_UNIT, upsertedRecipe.getName());
+        assertEquals(CATEGORY_ID_INITIAL_DB_UNIT, upsertedRecipe.getCategoryEntity().getCategory_oid());
+        assertTrue(upsertedRecipe.getIngredientEntities().stream().anyMatch(i -> i.getIngredient_oid().equals(INGREDIENT_ID_INITIAL_DB_UNIT)));
+        assertTrue(upsertedRecipe.getIngredientEntities().stream().anyMatch(i -> i.getIngredient_oid().equals(INGREDIENT_ID_EXTRA_INGEXTRA)));
+        assertTrue(upsertedRecipe.getInstructionEntities().stream().anyMatch(i -> i.getInstruction_id().equals(INSTRUCTION_ID_INITIAL_DB_UNIT)));
 
     }
 
+    @Test
+    void upsertRecipe_when_recipeIdenticButWithExtraInstruction_then_addNewInstruction() throws SQLException, DatabaseUnitException, IOException {
+        //arrange
+        importDbUnitFile(INITIAL_DBUNIT_XML);
+        Instruction instructionInitial = new InstructionBuilder()
+                .withInstruction(INSTRUCTION_TEXT_INITIAL_DB_UNIT)
+                .withInstructionId(INSTRUCTION_ID_INITIAL_DB_UNIT)
+                .build();
+        Instruction instructionExtra = new InstructionBuilder()
+                .withInstruction(INSTRUCTION_TEXT_EXTRA)
+                .withInstructionId(INSTRUCTION_ID_EXTRA)
+                .build();
+        Set<Instruction> instructions = new HashSet<>();
+        instructions.add(instructionInitial);
+        instructions.add(instructionExtra);
+        Recipe expectedRecipe = new RecipeBuilder()
+                .withRecipeId(RECIPE_ID_INITIAL_DB_UNIT)
+                .withRecipeName(RECIPE_NAME_INITIAL_DB_UNIT)
+                .withInstructions(instructions)
+                .build();
 
+        //act
+        transactionBegin();
+        testee.upsertRecipe(expectedRecipe);
+        transactionCommit();
 
+        //assert
+        RecipeEntity upsertedRecipe = em.find(RecipeEntity.class, RECIPE_ID_INITIAL_DB_UNIT);
+        assertEquals(RECIPE_NAME_INITIAL_DB_UNIT, upsertedRecipe.getName());
+        assertEquals(CATEGORY_ID_INITIAL_DB_UNIT, upsertedRecipe.getCategoryEntity().getCategory_oid());
+        assertTrue(upsertedRecipe.getIngredientEntities().stream().anyMatch(i -> i.getIngredient_oid().equals(INGREDIENT_ID_INITIAL_DB_UNIT)));
+        assertTrue(upsertedRecipe.getInstructionEntities().stream().anyMatch(i -> i.getInstruction_id().equals(INSTRUCTION_ID_INITIAL_DB_UNIT)));
+        assertTrue(upsertedRecipe.getInstructionEntities().stream().anyMatch(i -> i.getInstruction_id().equals(INSTRUCTION_ID_EXTRA)));
+    }
 
+    @Test
+    void searchRecipeByName_when_noMatchingRecipe_then_returnEmptyList() throws SQLException, DatabaseUnitException, IOException {
+        //arrange
+        importDbUnitFile(INITIAL_DBUNIT_XML);
+        List<Recipe> expectedRecipes;
+
+        //act
+        transactionBegin();
+        expectedRecipes = testee.searchRecipeByName(RECIPE_NAME_EXTRA);
+        transactionCommit();
+
+        //assert
+        assertTrue(expectedRecipes.isEmpty());
+    }
+
+    @Test
+    void searchRecipeByName_when_matchingRecipe_then_returnRecipe() throws SQLException, DatabaseUnitException, IOException {
+        //arrange
+        importDbUnitFile(INITIAL_DBUNIT_XML);
+        List<Recipe> expectedRecipes;
+
+        //act
+        transactionBegin();
+        expectedRecipes = testee.searchRecipeByName(RECIPE_NAME_INITIAL_DB_UNIT);
+        transactionCommit();
+
+        //assert
+        assertEquals(1, expectedRecipes.size());
+        Recipe recipe = expectedRecipes.get(0);
+
+        assertEquals(RECIPE_NAME_INITIAL_DB_UNIT, recipe.getRecipeName());
+        assertEquals(RECIPE_ID_INITIAL_DB_UNIT, recipe.getRecipeId());
+        Set<Ingredient> expectedIngredients = recipe.getIngredients();
+        Set<Instruction> expectedInstructions = recipe.getInstructions();
+        assertEquals(1, expectedInstructions.size());
+        assertEquals(1, expectedIngredients.size());
+        Ingredient ingredient = expectedIngredients.iterator().next();
+        Instruction instruction = expectedInstructions.iterator().next();
+        assertEquals(INGREDIENT_NAME_INITIAL_DB_UNIT, ingredient.getIngredientName());
+        assertEquals("4", ingredient.getQuantity());
+        assertEquals(IngredientsUnit.STUECK, ingredient.getUnit());
+        assertEquals(INSTRUCTION_TEXT_INITIAL_DB_UNIT, instruction.getInstructionText());
+    }
 }
