@@ -9,7 +9,6 @@ import java.util.Set;
 import static domin.homesite.cookbook.adapterpersistence.domain.category.CategoryEntity.COUNT_CATEGORIES;
 import static domin.homesite.cookbook.adapterpersistence.domain.category.CategoryEntity.TABLENAME;
 
-@MappedSuperclass
 @Entity
 @Table(name = TABLENAME)
 @Data

@@ -7,11 +7,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 import static domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity.*;
 
-@MappedSuperclass
 @Getter
 @Setter
 @Entity
@@ -34,7 +34,7 @@ public class RecipeEntity {
     @Column(name = "PICTURE", length = 100000)
     private byte[] picture;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "CATEGORY_ID", nullable = false)
     private CategoryEntity categoryEntity;
 
@@ -42,12 +42,12 @@ public class RecipeEntity {
     @JoinTable(name = "RECIPE_INGREDIENTS",
             joinColumns = @JoinColumn(name = "RECIPE_OID"),
             inverseJoinColumns = @JoinColumn(name = "INGREDIENT_OID"))
-    private Set<IngredientEntity> ingredientEntities;
+    private Set<IngredientEntity> ingredientEntities = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(name = "RECIPE_INSTRUCTIONS",
             joinColumns = @JoinColumn(name = "RECIPE_OID"),
             inverseJoinColumns = @JoinColumn(name = "INSTRUCTION_OID"))
-    private Set<InstructionEntity> instructionEntities;
+    private Set<InstructionEntity> instructionEntities = new HashSet<>();
 
 }

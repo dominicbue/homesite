@@ -1,5 +1,6 @@
-package domin.homesite.cookbook.adapterpersistence;
+package domin.homesite.cookbook.adapterpersistence.domain;
 
+import domin.homesite.cookbook.adapterpersistence.AbstractRepository;
 import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity;
 import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeMapper;
 import domin.homesite.cookbook.recipemanagement.domain.Recipe;
@@ -19,19 +20,23 @@ import static domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEnt
 public class RecipeRepositoryImpl extends AbstractRepository<RecipeEntity> implements IRecipeRepository {
 
     private final RecipeMapper recipeMapper;
+    private final EntityMergeHelper mergeHelper;
 
-    public RecipeRepositoryImpl(RecipeMapper recipeMapper) {
+    public RecipeRepositoryImpl(RecipeMapper recipeMapper, EntityMergeHelper entityMergeHelper) {
         this.recipeMapper = recipeMapper;
+        this.mergeHelper = entityMergeHelper;
     }
 
     public void upsertRecipe(@NonNull Recipe recipe) {
-        //Todo:
-        RecipeEntity entity = new RecipeEntity();
+        RecipeEntity entity;
         Optional<RecipeEntity> optional = find(RecipeEntity.class, recipe.getRecipeId());
         if (optional.isPresent()) {
             entity = optional.get();
+        } else {
+            entity = new RecipeEntity();
         }
         recipeMapper.mapDomainToEntity(recipe, entity);
+        mergeHelper.mergeWithExistingEntities(entity);
         persist(entity);
     }
 

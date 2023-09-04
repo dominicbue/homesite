@@ -15,7 +15,6 @@ import java.util.Set;
 @Log4j2
 public class RecipeMapper {
 
-    public static final int NONE_EQUAL_ENTITY = -1;
     private final CategoryMapper categoryMapper = new CategoryMapper();
     private final IngredientMapper ingredientMapper = new IngredientMapper();
     private final InstructionMapper instructionMapper = new InstructionMapper();
@@ -73,6 +72,7 @@ public class RecipeMapper {
             if (isIngredientAlreadyPersisted(ingredient, entity.getIngredientEntities())) {
                 continue;
             }
+
             IngredientEntity temporaryIngredientEntity = new IngredientEntity();
             ingredientMapper.mapDomainToEntity(ingredient, temporaryIngredientEntity);
             entity.getIngredientEntities().add(temporaryIngredientEntity);
@@ -80,6 +80,9 @@ public class RecipeMapper {
     }
 
     private boolean isIngredientAlreadyPersisted(Ingredient ingredient, Set<IngredientEntity> persistedIngredients) {
+        if(persistedIngredients == null){
+            return false;
+        }
         return persistedIngredients.stream().anyMatch(e -> e.getIngredient_oid().equals(ingredient.getIngredientId()));
     }
 
@@ -95,6 +98,9 @@ public class RecipeMapper {
     }
 
     private boolean isInstructionAlreadyPersisted(Instruction instruction, Set<InstructionEntity> instructionEntities) {
+        if(instructionEntities == null) {
+            return false;
+        }
         return instructionEntities.stream().anyMatch(i -> i.getInstruction_id().equals(instruction.getInstructionId()));
     }
 
