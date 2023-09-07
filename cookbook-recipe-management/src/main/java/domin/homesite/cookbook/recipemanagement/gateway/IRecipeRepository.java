@@ -2,13 +2,13 @@ package domin.homesite.cookbook.recipemanagement.gateway;
 
 import domin.homesite.cookbook.recipemanagement.domain.Recipe;
 
-import java.util.List;
+import java.util.Set;
 
 public interface IRecipeRepository {
 
     void upsertRecipe(Recipe recipe);
 
-    List<Recipe> searchRecipeByName(String recipeName);
+    Set<Recipe> searchRecipeByName(String recipeName);
 
 
 }

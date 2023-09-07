@@ -11,8 +11,8 @@ import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 import javax.persistence.TypedQuery;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity.PARAMETER_RECIPE_NAME;
@@ -42,13 +42,13 @@ public class RecipeRepositoryImpl extends AbstractRepository<RecipeEntity> imple
         persist(entity);
     }
 
-    public List<Recipe> searchRecipeByName(@NonNull String recipeName) {
+    public Set<Recipe> searchRecipeByName(@NonNull String recipeName) {
         final TypedQuery<RecipeEntity> query = createNamedQuery(SEARCH_RECIPE_WITH_NAME, RecipeEntity.class);
         query.setParameter(PARAMETER_RECIPE_NAME, recipeName);
         log.info("SQL-Statement von " + SEARCH_RECIPE_WITH_NAME + " : " + query + " Parameter - Value : " + query.getParameterValue(PARAMETER_RECIPE_NAME));
         return query.getResultStream()
                 .map(recipeMapper::mapEntityToDomain)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     public void setEntityMergerHelper(EntityMergeHelper mergeHelper) {

@@ -15,7 +15,6 @@ import javax.persistence.Query;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static domin.homesite.cookbook.adapterpersistence.domain.category.CategoryEntity.COUNT_CATEGORIES;
@@ -265,7 +264,7 @@ class RecipeRepositoryImplTest extends AbstractRepositoryTest {
     void searchRecipeByName_when_noMatchingRecipe_then_returnEmptyList() throws SQLException, DatabaseUnitException, IOException {
         //arrange
         importDbUnitFile(INITIAL_DBUNIT_XML);
-        List<Recipe> expectedRecipes;
+        Set<Recipe> expectedRecipes;
 
         //act
         transactionBegin();
@@ -280,7 +279,7 @@ class RecipeRepositoryImplTest extends AbstractRepositoryTest {
     void searchRecipeByName_when_matchingRecipe_then_returnRecipe() throws SQLException, DatabaseUnitException, IOException {
         //arrange
         importDbUnitFile(INITIAL_DBUNIT_XML);
-        List<Recipe> expectedRecipes;
+        Set<Recipe> expectedRecipes;
 
         //act
         transactionBegin();
