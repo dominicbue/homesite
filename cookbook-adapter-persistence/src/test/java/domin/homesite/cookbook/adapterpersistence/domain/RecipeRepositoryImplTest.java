@@ -4,7 +4,6 @@ import domin.homesite.cookbook.adapterpersistence.AbstractRepositoryTest;
 import domin.homesite.cookbook.adapterpersistence.domain.ingredients.IngredientRepositoryImpl;
 import domin.homesite.cookbook.adapterpersistence.domain.instructions.InstructionRepositoryImpl;
 import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity;
-import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeMapper;
 import domin.homesite.cookbook.recipemanagement.domain.*;
 import org.dbunit.DatabaseUnitException;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,7 +46,7 @@ class RecipeRepositoryImplTest extends AbstractRepositoryTest {
     private static final String INGREDIENT_NAME_EXTRA_MEHL = "Test Mehl";
     private static final String INSTRUCTION_ID_EXTRA = "InsExtra";
     private static final String INSTRUCTION_TEXT_EXTRA = "Do this Extra";
-    private RecipeRepositoryImpl testee;
+    private final RecipeRepositoryImpl testee = new RecipeRepositoryImpl();
 
     @BeforeEach
     void setup() {
@@ -57,8 +56,7 @@ class RecipeRepositoryImplTest extends AbstractRepositoryTest {
         injectEntityManagerToClass(instructionRepository);
         EntityMergeHelper mergeHelper = new EntityMergeHelper(ingredientRepository, instructionRepository);
 
-        RecipeMapper recipeMapper = new RecipeMapper();
-        testee = new RecipeRepositoryImpl(recipeMapper, mergeHelper);
+        testee.setEntityMergerHelper(mergeHelper);
         injectEntityManagerToClass(testee);
 
     }

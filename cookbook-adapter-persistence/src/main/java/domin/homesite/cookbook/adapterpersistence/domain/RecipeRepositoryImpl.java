@@ -1,6 +1,8 @@
 package domin.homesite.cookbook.adapterpersistence.domain;
 
 import domin.homesite.cookbook.adapterpersistence.AbstractRepository;
+import domin.homesite.cookbook.adapterpersistence.domain.ingredients.IngredientRepositoryImpl;
+import domin.homesite.cookbook.adapterpersistence.domain.instructions.InstructionRepositoryImpl;
 import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity;
 import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeMapper;
 import domin.homesite.cookbook.recipemanagement.domain.Recipe;
@@ -20,11 +22,11 @@ import static domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEnt
 public class RecipeRepositoryImpl extends AbstractRepository<RecipeEntity> implements IRecipeRepository {
 
     private final RecipeMapper recipeMapper;
-    private final EntityMergeHelper mergeHelper;
+    private  EntityMergeHelper mergeHelper;
 
-    public RecipeRepositoryImpl(RecipeMapper recipeMapper, EntityMergeHelper entityMergeHelper) {
-        this.recipeMapper = recipeMapper;
-        this.mergeHelper = entityMergeHelper;
+    public RecipeRepositoryImpl() {
+        this.recipeMapper = new RecipeMapper();
+        this.mergeHelper = new EntityMergeHelper(new IngredientRepositoryImpl(), new InstructionRepositoryImpl());
     }
 
     public void upsertRecipe(@NonNull Recipe recipe) {
@@ -47,5 +49,9 @@ public class RecipeRepositoryImpl extends AbstractRepository<RecipeEntity> imple
         return query.getResultStream()
                 .map(recipeMapper::mapEntityToDomain)
                 .collect(Collectors.toList());
+    }
+
+    public void setEntityMergerHelper(EntityMergeHelper mergeHelper) {
+        this.mergeHelper = mergeHelper;
     }
 }
