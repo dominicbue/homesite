@@ -19,6 +19,7 @@
     <modules>
         <module>cookbook-recipe-management</module>
         <module>cookbook-adapter-persistence</module>
+        <module>cookbook-ear</module>
     </modules>
 
     <dependencies>
