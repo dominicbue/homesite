@@ -1,8 +1,6 @@
 package domin.homesite.cookbook.adapterpersistence.domain;
 
 import domin.homesite.cookbook.adapterpersistence.AbstractRepository;
-import domin.homesite.cookbook.adapterpersistence.domain.ingredients.IngredientRepositoryImpl;
-import domin.homesite.cookbook.adapterpersistence.domain.instructions.InstructionRepositoryImpl;
 import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity;
 import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeMapper;
 import domin.homesite.cookbook.recipemanagement.domain.Recipe;
@@ -10,6 +8,7 @@ import domin.homesite.cookbook.recipemanagement.gateway.IRecipeRepository;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 
+import javax.inject.Inject;
 import javax.persistence.TypedQuery;
 import java.util.Optional;
 import java.util.Set;
@@ -24,9 +23,10 @@ public class RecipeRepositoryImpl extends AbstractRepository<RecipeEntity> imple
     private final RecipeMapper recipeMapper;
     private  EntityMergeHelper mergeHelper;
 
-    public RecipeRepositoryImpl() {
-        this.recipeMapper = new RecipeMapper();
-        this.mergeHelper = new EntityMergeHelper(new IngredientRepositoryImpl(), new InstructionRepositoryImpl());
+    @Inject
+    public RecipeRepositoryImpl(RecipeMapper recipeMapper, EntityMergeHelper mergeHelper) {
+        this.recipeMapper = recipeMapper;
+        this.mergeHelper = mergeHelper;
     }
 
     public void upsertRecipe(@NonNull Recipe recipe) {

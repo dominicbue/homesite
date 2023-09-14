@@ -2,6 +2,7 @@ package domin.homesite.cookbook.adapterpersistence.domain.instructions;
 
 import domin.homesite.cookbook.adapterpersistence.AbstractRepository;
 import domin.homesite.cookbook.recipemanagement.gateway.IInstructionRepository;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 import javax.persistence.TypedQuery;
@@ -13,10 +14,9 @@ import static java.lang.String.format;
 
 
 @Log4j2
+@NoArgsConstructor
 public class InstructionRepositoryImpl extends AbstractRepository<InstructionEntity> implements IInstructionRepository {
 
-
-    public InstructionRepositoryImpl() {}
 
     public Optional<InstructionEntity> findIdenticalPersistedInstruction(InstructionEntity instruction) {
         final TypedQuery<InstructionEntity> query = createNamedQuery(FIND_IDENTICAL_INSTRUCTION, InstructionEntity.class);

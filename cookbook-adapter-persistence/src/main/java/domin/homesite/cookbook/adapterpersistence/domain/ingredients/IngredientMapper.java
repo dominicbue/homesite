@@ -3,10 +3,9 @@ package domin.homesite.cookbook.adapterpersistence.domain.ingredients;
 import domin.homesite.cookbook.recipemanagement.domain.Ingredient;
 import domin.homesite.cookbook.recipemanagement.domain.IngredientBuilder;
 import domin.homesite.cookbook.recipemanagement.domain.IngredientsUnit;
+import lombok.NoArgsConstructor;
 
-import javax.enterprise.context.RequestScoped;
-
-@RequestScoped
+@NoArgsConstructor
 public class IngredientMapper {
 
     public void mapDomainToEntity(Ingredient ingredient, IngredientEntity entity) {

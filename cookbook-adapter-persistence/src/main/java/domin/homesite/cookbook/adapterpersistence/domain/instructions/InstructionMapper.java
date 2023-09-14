@@ -2,10 +2,9 @@ package domin.homesite.cookbook.adapterpersistence.domain.instructions;
 
 import domin.homesite.cookbook.recipemanagement.domain.Instruction;
 import domin.homesite.cookbook.recipemanagement.domain.InstructionBuilder;
+import lombok.NoArgsConstructor;
 
-import javax.enterprise.context.RequestScoped;
-
-@RequestScoped
+@NoArgsConstructor
 public class InstructionMapper {
 
     public void mapDomainToEntity(Instruction instruction, InstructionEntity entity) {

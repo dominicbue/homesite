@@ -1,9 +1,13 @@
 package domin.homesite.cookbook.adapterpersistence.domain;
 
 import domin.homesite.cookbook.adapterpersistence.AbstractRepositoryTest;
+import domin.homesite.cookbook.adapterpersistence.domain.category.CategoryMapper;
+import domin.homesite.cookbook.adapterpersistence.domain.ingredients.IngredientMapper;
 import domin.homesite.cookbook.adapterpersistence.domain.ingredients.IngredientRepositoryImpl;
+import domin.homesite.cookbook.adapterpersistence.domain.instructions.InstructionMapper;
 import domin.homesite.cookbook.adapterpersistence.domain.instructions.InstructionRepositoryImpl;
 import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity;
+import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeMapper;
 import domin.homesite.cookbook.recipemanagement.domain.*;
 import org.dbunit.DatabaseUnitException;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,16 +49,18 @@ class RecipeRepositoryImplTest extends AbstractRepositoryTest {
     private static final String INGREDIENT_NAME_EXTRA_MEHL = "Test Mehl";
     private static final String INSTRUCTION_ID_EXTRA = "InsExtra";
     private static final String INSTRUCTION_TEXT_EXTRA = "Do this Extra";
-    private final RecipeRepositoryImpl testee = new RecipeRepositoryImpl();
+    private RecipeRepositoryImpl testee;
 
     @BeforeEach
     void setup() {
-        IngredientRepositoryImpl ingredientRepository = new IngredientRepositoryImpl();
+        IngredientRepositoryImpl ingredientRepository = new IngredientRepositoryImpl(new IngredientMapper());
         injectEntityManagerToClass(ingredientRepository);
         InstructionRepositoryImpl instructionRepository = new InstructionRepositoryImpl();
         injectEntityManagerToClass(instructionRepository);
-        EntityMergeHelper mergeHelper = new EntityMergeHelper(ingredientRepository, instructionRepository);
+        EntityMergeHelper mergeHelper = new EntityMergeHelper(ingredientRepository, new IngredientMapper(), instructionRepository, new InstructionMapper());
+        RecipeMapper recipeMapper = new RecipeMapper(new CategoryMapper(), new IngredientMapper(), new InstructionMapper());
 
+        testee = new RecipeRepositoryImpl(recipeMapper, mergeHelper);
         testee.setEntityMergerHelper(mergeHelper);
         injectEntityManagerToClass(testee);
 
@@ -288,7 +294,7 @@ class RecipeRepositoryImplTest extends AbstractRepositoryTest {
 
         //assert
         assertEquals(1, expectedRecipes.size());
-        Recipe recipe = expectedRecipes.get(0);
+        Recipe recipe = expectedRecipes.iterator().next();
 
         assertEquals(RECIPE_NAME_INITIAL_DB_UNIT, recipe.getRecipeName());
         assertEquals(RECIPE_ID_INITIAL_DB_UNIT, recipe.getRecipeId());

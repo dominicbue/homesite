@@ -8,6 +8,7 @@ import domin.homesite.cookbook.adapterpersistence.domain.instructions.Instructio
 import domin.homesite.cookbook.adapterpersistence.domain.instructions.InstructionRepositoryImpl;
 import domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity;
 
+import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -19,11 +20,12 @@ public class EntityMergeHelper {
     private InstructionRepositoryImpl instructionRepository;
     private InstructionMapper instructionMapper;
 
-    public EntityMergeHelper(IngredientRepositoryImpl ingredientRepository, InstructionRepositoryImpl instructionRepository) {
+    @Inject
+    public EntityMergeHelper(IngredientRepositoryImpl ingredientRepository, IngredientMapper ingredientMapper, InstructionRepositoryImpl instructionRepository, InstructionMapper instructionMapper) {
         this.ingredientRepository = ingredientRepository;
+        this.ingredientMapper = ingredientMapper;
         this.instructionRepository = instructionRepository;
-        this.ingredientMapper = new IngredientMapper();
-        this.instructionMapper = new InstructionMapper();
+        this.instructionMapper = instructionMapper;
     }
 
     public void mergeWithExistingEntities(RecipeEntity recipeEntity) {

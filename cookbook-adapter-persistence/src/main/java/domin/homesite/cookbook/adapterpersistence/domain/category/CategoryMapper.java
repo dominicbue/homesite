@@ -2,7 +2,9 @@ package domin.homesite.cookbook.adapterpersistence.domain.category;
 
 import domin.homesite.cookbook.recipemanagement.domain.Category;
 import domin.homesite.cookbook.recipemanagement.domain.CategoryBuilder;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class CategoryMapper {
 
     public void mapDomainToEntity(Category category, CategoryEntity entity) {

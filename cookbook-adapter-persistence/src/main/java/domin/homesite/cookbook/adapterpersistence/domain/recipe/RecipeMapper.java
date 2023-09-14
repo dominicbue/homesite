@@ -9,15 +9,23 @@ import domin.homesite.cookbook.adapterpersistence.domain.instructions.Instructio
 import domin.homesite.cookbook.recipemanagement.domain.*;
 import lombok.extern.log4j.Log4j2;
 
+import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
 
 @Log4j2
 public class RecipeMapper {
 
-    private final CategoryMapper categoryMapper = new CategoryMapper();
-    private final IngredientMapper ingredientMapper = new IngredientMapper();
-    private final InstructionMapper instructionMapper = new InstructionMapper();
+    private final CategoryMapper categoryMapper;
+    private final IngredientMapper ingredientMapper;
+    private final InstructionMapper instructionMapper;
+
+    @Inject
+    public RecipeMapper(CategoryMapper categoryMapper, IngredientMapper ingredientMapper, InstructionMapper instructionMapper) {
+        this.categoryMapper = categoryMapper;
+        this.ingredientMapper = ingredientMapper;
+        this.instructionMapper = instructionMapper;
+    }
 
     public void mapDomainToEntity(Recipe recipe, RecipeEntity entity) {
         entity.setName(recipe.getRecipeName());

@@ -4,6 +4,7 @@ import domin.homesite.cookbook.adapterpersistence.AbstractRepository;
 import domin.homesite.cookbook.recipemanagement.gateway.IIngredientRepository;
 import lombok.extern.log4j.Log4j2;
 
+import javax.inject.Inject;
 import javax.persistence.TypedQuery;
 import java.util.Optional;
 
@@ -15,8 +16,9 @@ public class IngredientRepositoryImpl extends AbstractRepository<IngredientEntit
 
     private IngredientMapper ingredientMapper;
 
-    public IngredientRepositoryImpl() {
-        this.ingredientMapper = new IngredientMapper();
+    @Inject
+    public IngredientRepositoryImpl(IngredientMapper ingredientMapper) {
+        this.ingredientMapper = ingredientMapper;
     }
 
     public Optional<IngredientEntity> findIdenticalPersistedIngredient(IngredientEntity ingredient) {
