@@ -25,6 +25,11 @@
             <artifactId>primefaces</artifactId>
             <version>12.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>primeflex</artifactId>
+            <version>3.0.1</version>
+        </dependency>
         <!-- Scope Import -->
         <dependency>
             <groupId>javax.servlet</groupId>
