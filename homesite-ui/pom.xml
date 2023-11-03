@@ -19,22 +19,13 @@
     <name>homesite-ui</name>
 
     <dependencies>
+        <!-- Primefaces for UI -->
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>12.0.0</version>
+        </dependency>
         <!-- Scope Import -->
-        <dependency>
-            <groupId>javax.faces</groupId>
-            <artifactId>javax.faces-api</artifactId>
-            <version>2.3</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-api</artifactId>
-            <version>2.2.20</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-impl</artifactId>
-            <version>2.2.20</version>
-        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -44,6 +35,13 @@
             <groupId>domin.homesite</groupId>
             <artifactId>homesite-gil</artifactId>
             <version>${project.parent.version}</version>
+        </dependency>
+        <!-- Scope Provided -->
+        <dependency>
+            <groupId>javax.faces</groupId>
+            <artifactId>jsf-api</artifactId>
+            <version>2.1</version>
+            <scope>provided</scope>
         </dependency>
         <!-- Scope Test -->
         <dependency>
