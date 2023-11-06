@@ -16,13 +16,16 @@ import static domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEnt
 @Setter
 @Entity
 @Table(name = TABLENAME)
-@NamedQueries(
+@NamedQueries({
         @NamedQuery(name = SEARCH_RECIPE_WITH_NAME,
-                query = "SELECT r FROM RecipeEntity r WHERE r.name = :" + PARAMETER_RECIPE_NAME)
-)
+                query = "SELECT r FROM RecipeEntity r WHERE r.name = :" + PARAMETER_RECIPE_NAME),
+        @NamedQuery(name = GET_ALL_RECIPES,
+                query = "SELECT r FROM RecipeEntity r")
+})
 public class RecipeEntity {
     public static final String TABLENAME = "RECIPES";
     public static final String SEARCH_RECIPE_WITH_NAME = "searchRecipeWithName";
+    public static final String GET_ALL_RECIPES = "getAllRecipes";
     public static final String PARAMETER_RECIPE_NAME = "name";
 
     @Id

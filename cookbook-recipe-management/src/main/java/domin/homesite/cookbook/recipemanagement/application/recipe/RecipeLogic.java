@@ -4,7 +4,7 @@ import domin.homesite.cookbook.recipemanagement.domain.Recipe;
 import domin.homesite.cookbook.recipemanagement.gateway.IRecipeRepository;
 
 import javax.inject.Inject;
-import java.util.Set;
+import java.util.List;
 
 public class RecipeLogic  {
 
@@ -19,10 +19,8 @@ public class RecipeLogic  {
         recipeRepository.upsertRecipe(recipe);
     }
 
-    public Set<Recipe> searchRecipeWithPartOfName(String partOfName) {
-        Set<Recipe> foundRecipe = recipeRepository.searchRecipeByName("");
-        //ToDo implement the searchLogic, maybe better in repository
-        return null;
+    public List<Recipe> getAllRecipes() {
+        return recipeRepository.getAllRecipes();
     }
 
 }

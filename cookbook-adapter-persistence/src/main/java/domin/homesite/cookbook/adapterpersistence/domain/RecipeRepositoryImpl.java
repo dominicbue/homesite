@@ -10,12 +10,12 @@ import lombok.extern.log4j.Log4j2;
 
 import javax.inject.Inject;
 import javax.persistence.TypedQuery;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity.PARAMETER_RECIPE_NAME;
-import static domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity.SEARCH_RECIPE_WITH_NAME;
+import static domin.homesite.cookbook.adapterpersistence.domain.recipe.RecipeEntity.*;
 
 @Log4j2
 public class RecipeRepositoryImpl extends AbstractRepository<RecipeEntity> implements IRecipeRepository {
@@ -49,6 +49,14 @@ public class RecipeRepositoryImpl extends AbstractRepository<RecipeEntity> imple
         return query.getResultStream()
                 .map(recipeMapper::mapEntityToDomain)
                 .collect(Collectors.toSet());
+    }
+
+    public List<Recipe> getAllRecipes() {
+        final TypedQuery<RecipeEntity> query = createNamedQuery(GET_ALL_RECIPES, RecipeEntity.class);
+        log.info("SQL-Statement von " + GET_ALL_RECIPES + " : " + query);
+        return query.getResultStream()
+                .map(recipeMapper::mapEntityToDomain)
+                .collect(Collectors.toList());
     }
 
     public void setEntityMergerHelper(EntityMergeHelper mergeHelper) {

@@ -23,6 +23,10 @@
             <artifactId>cookbook-adapter-persistence</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
         <!-- Scope Test -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
