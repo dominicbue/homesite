@@ -30,24 +30,14 @@
             <artifactId>primeflex</artifactId>
             <version>3.0.1</version>
         </dependency>
+
         <!-- Scope Import -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
-        </dependency>
         <dependency>
             <groupId>domin.homesite</groupId>
             <artifactId>homesite-gil</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <!-- Scope Provided -->
-        <dependency>
-            <groupId>javax.faces</groupId>
-            <artifactId>jsf-api</artifactId>
-            <version>2.1</version>
-            <scope>provided</scope>
-        </dependency>
+
         <!-- Scope Test -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
