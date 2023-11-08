@@ -19,6 +19,7 @@ import javax.persistence.Query;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static domin.homesite.cookbook.adapterpersistence.domain.category.CategoryEntity.COUNT_CATEGORIES;
@@ -308,5 +309,39 @@ class RecipeRepositoryImplTest extends AbstractRepositoryTest {
         assertEquals("4", ingredient.getQuantity());
         assertEquals(IngredientsUnit.STUECK, ingredient.getUnit());
         assertEquals(INSTRUCTION_TEXT_INITIAL_DB_UNIT, instruction.getInstructionText());
+    }
+
+    @Test
+    void getAllRecipes_when_noRecipeExists_thenReturnEmptyList() {
+        //arrange
+        List<Recipe> expectedRecipes;
+
+        //act
+        transactionBegin();
+        expectedRecipes = testee.getAllRecipes();
+        transactionCommit();
+
+        //assert
+        assertEquals(0, expectedRecipes.size());
+    }
+
+    @Test
+    void getAllRecipes_whenOnlyOneRecipe_thenReturnList() throws SQLException, DatabaseUnitException, IOException {
+        //arrange
+        importDbUnitFile(INITIAL_DBUNIT_XML);
+        List<Recipe> expectedRecipes;
+
+        //act
+        transactionBegin();
+        expectedRecipes = testee.getAllRecipes();
+        transactionCommit();
+
+        //assert
+        assertEquals(1, expectedRecipes.size());
+        Recipe readedRecipe = expectedRecipes.get(0);
+        assertEquals(RECIPE_NAME_INITIAL_DB_UNIT, readedRecipe.getRecipeName());
+        assertEquals(RECIPE_ID_INITIAL_DB_UNIT, readedRecipe.getRecipeId());
+        assertEquals(CATEGORY_NAME_INITIAL_DB_UNIT, readedRecipe.getCategory().getCategoryName());
+        assertEquals(CATEGORY_ID_INITIAL_DB_UNIT, readedRecipe.getCategory().getCategoryId());
     }
 }
