@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class DomainTestDataFactory {
 
-    public static final String RECIPE_ID = "Rec0";
+    public static final String DUMMY_RECIPE_ID = "Rec0";
     public static final String DUMMY_RECIPE_NAME = "Dummy Recipe";
     public static final String INSTRUCTION_DO_THIS = "Do this. Is from dummyBuilder.";
     public static final String INSTRUCTION_AND_THIS = "And this. Is from dummyBuilder.";
@@ -13,13 +13,14 @@ public class DomainTestDataFactory {
     public static final String QUANTITY_4 = "4";
     public static final String INGREDIENT_NAME_EXTRA_MEHL = "Test Mehl";
     public static final String QUANTITY_400 = "400";
+    public static final String DUMMY_CATEGORY_ID = "Cat01";
     public static final String DUMMY_CATEGORIE_NAME = "Dummy Category";
     public static final String INSTRUCTION_ID_INS02 = "Ins02";
     public static final String INSTRUCTION_ID_INS01 = "Ins01";
 
     public static Category dummyCategory() {
         return new CategoryBuilder()
-                .withCategoryId("Cat01")
+                .withCategoryId(DUMMY_CATEGORY_ID)
                 .withCategoryName(DUMMY_CATEGORIE_NAME)
                 .build();
     }
@@ -60,7 +61,7 @@ public class DomainTestDataFactory {
 
     public static RecipeBuilder dummyRecipeBuilder() {
         return new RecipeBuilder()
-                .withRecipeId(RECIPE_ID)
+                .withRecipeId(DUMMY_RECIPE_ID)
                 .withRecipeName(DUMMY_RECIPE_NAME)
                 .withCategory(dummyCategory())
                 .withIngredients(dummyIngredient())
