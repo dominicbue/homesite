@@ -33,6 +33,12 @@
 
         <!-- Scope Import -->
         <dependency>
+            <groupId>javax.faces</groupId>
+            <artifactId>javax.faces-api</artifactId>
+            <version>2.2</version> <!-- Use the appropriate version -->
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>domin.homesite</groupId>
             <artifactId>homesite-gil</artifactId>
             <version>${project.parent.version}</version>
