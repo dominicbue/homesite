@@ -8,8 +8,8 @@
 
 
 <h:head>
-    <title>HomeSite Startseite</title>
-    <link href="stylesheets/style.css"
+    <title>HomeSite Rezept Buch</title>
+    <link href="../stylesheets/style.css"
           rel="stylesheet"
           type="text/css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -18,17 +18,21 @@
     <p:toolbar>
         <f:facet name="left">
             <h:link rendered="true" outcome="index.xhtml">
-                <h:graphicImage value="icons/icon160x160.png" styleClass="ui-icon-home" width="65"/>
-                <p:menubar id="menubar" autodisplay="true" >
-                    <p:menuitem value="Rezpet Buch" url="recipebook/recipebook.xhtml" />
+                <h:graphicImage value="../icons/icon160x160.png" styleClass="ui-icon-home" width="65"/>
+                <p:menubar id="navigation" autodisplay="true" >
+                    <p:menuitem value="Rezpet Buch" url="recipebook.xhtml" />
                 </p:menubar>
             </h:link>
         </f:facet>
         <f:facet name="right">
-
+            <p:menubar id="tools" autodisplay="true">
+                <p:submenu label="Tools">
+                    <p:menuitem value="Neues Rezept" url="recipecreator.xhtml"/>
+                    <p:menuitem value="Rezept Bearbeiten" url="recipeeditor.xhtml"/>
+                </p:submenu>
+            </p:menubar>
         </f:facet>
     </p:toolbar>
-
     <p:outputLabel>
         Hello World
     </p:outputLabel>
