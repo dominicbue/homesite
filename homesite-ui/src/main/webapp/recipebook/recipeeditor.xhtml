@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+<h:head>
+    <title>HomeSite Rezept Buch</title>
+    <link href="../stylesheets/style.css"
+          rel="stylesheet"
+          type="text/css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</h:head>
+<h:body>
+    <p:toolbar>
+        <f:facet name="left">
+            <h:link rendered="true" outcome="index.xhtml">
+                <h:graphicImage value="../icons/icon160x160.png" styleClass="ui-icon-home" width="65"/>
+                <p:menubar id="navigation" autodisplay="true" >
+                    <p:menuitem value="Rezpet Buch" url="recipebook.xhtml" />
+                </p:menubar>
+            </h:link>
+        </f:facet>
+        <f:facet name="right">
+            <p:menubar id="tools" autodisplay="true">
+                <p:submenu label="Tools">
+                    <p:menuitem value="Neues Rezept " url="recipecreator.xhtml"/>
+                </p:submenu>
+            </p:menubar>
+        </f:facet>
+    </p:toolbar>
+    <h:form id="myForm">
+
+        <p:panelGrid columns="3" columnClasses="label, value, icons">
+            <h:outputLabel for="recipeId" value="Rezept ID:"/>
+            <p:inputText id="recipeId" disabled="true" value="recipeId"/>
+
+            <h:outputLabel for="recipeName" value="Rezept Titel:"/>
+            <p:inputText id="recipeName" placeholder="Rezpet Titel eingeben" value=""/>
+
+            <h:outputLabel for="category" value="Kategorie:" />
+            <p:selectOneMenu id="category" value="">
+                <f:selectItem itemLabel="-- Wähle eine Kategorie --" itemValue=""/>
+                <f:selectItems value=""/>
+            </p:selectOneMenu>
+        </p:panelGrid>
+        <!-- <p:commandButton value="Submit" action="#{yourManagedBean.submit}"/> -->
+    </h:form>
+</h:body>
+</html>
