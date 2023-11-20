@@ -1,5 +1,8 @@
 package domin.homesite.gil.domain;
 
+import lombok.Getter;
+
+@Getter
 public enum IngredientsUnit {
     KILOGRAMM ("kg"),
     GRAMM ("g"),
@@ -25,4 +28,6 @@ public enum IngredientsUnit {
         }
         throw new IllegalArgumentException(value);
     }
+
+
 }

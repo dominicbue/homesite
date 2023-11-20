@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+<h:head>
+    <title>HomeSite Rezept Buch</title>
+    <link href="../stylesheets/style.css"
+          rel="stylesheet"
+          type="text/css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</h:head>
+<h:body styleClass="body">
+    <p:toolbar>
+        <c:facet name="left">
+            <h:link rendered="true" outcome="../index.xhtml">
+                <h:graphicImage value="../icons/icon160x160.png" styleClass="ui-icon-home" width="65"/>
+            </h:link>
+            <p:menubar id="navigation" autodisplay="true" style="margin-left: 15px;">
+                <p:menuitem value="Rezpet Buch" url="recipebook.xhtml"/>
+            </p:menubar>
+        </c:facet>
+        <c:facet name="right">
+            <p:menubar id="tools" autodisplay="true">
+                <p:submenu label="Tools">
+                    <p:menuitem value="Rezept Bearbeiten" url="recipeeditor.xhtml"/>
+                </p:submenu>
+            </p:menubar>
+        </c:facet>
+    </p:toolbar>
+
+    <h:form id="newRecipe">
+        <p:panelGrid columns="2" columnClasses="label, value">
+            <h:outputLabel for="recipeName" value="Rezept Titel:"/>
+            <p:inputText id="recipeName" placeholder="Rezpet Titel eingeben"
+                         value="#{recipeCreatorController.recipeName}"/>
+            <h:outputLabel for="category" value="Kategorie:"/>
+            <p:panelGrid columns="2" columnClasses="value, actionIcon">
+                <p:selectOneMenu id="category" value="#{recipeCreatorController.recipeCategory}"
+                                 converter="categoryConverter">
+                    <c:selectItem itemValue="#{recipeCreatorController.recipeCategory}" itemLabel="#{recipeCreatorController.recipeCategory.categoryName}"/>
+                    <c:selectItems value="#{recipeCreatorController.persistedCategories}" var="cat"
+                                   itemLabel="#{cat.categoryName}" itemValue="#{cat}"/>
+                </p:selectOneMenu>
+                <p:commandButton value="Neue Kategorie" oncomplete="PF('popupCategory').show()" icon="pi pi-plus-circle"
+                                 styleClass="round-icon"/>
+            </p:panelGrid>
+            <h:outputLabel for="ingredientList" value="Zutaten:"/>
+
+            <p:panelGrid columns="2" columnClasses="value, action">
+                <p:dataList id="ingredientList" type="none" value="#{recipeCreatorController.recipeIngredients}"
+                            var="ingredient">
+                    <p:panelGrid columns="3" columnClasses="quantity, unit, name">
+                        <p:inputText value="#{ingredient.quantity}"/>
+                        <p:selectOneMenu id="unit" value="#{ingredient.unit}" converter="ingredientConverter">
+                            <c:selectItem itemLabel="#{ingredient.unit.name()}" itemValue="#{ingredient.unit}"/>
+                            <c:selectItems value="#{recipeCreatorController.ingredientUnits}" var="unitValue"
+                                           itemLabel="#{unitValue}" itemValue="#{unitValue}"/>
+                        </p:selectOneMenu>
+                        <p:inputText value="#{ingredient.ingredientName}"/>
+                    </p:panelGrid>
+                </p:dataList>
+                <p:commandButton value="Neue Zutat" oncomplete="PF('popupIngredient').show()" icon="pi pi-plus-circle"
+                                 styleClass="round-icon"/>
+            </p:panelGrid>
+        </p:panelGrid>
+    </h:form>
+
+    <!-- <p:commandButton value="Submit" action="#{yourManagedBean.submit}"/> -->
+    <!-- Popup dialog for new category-->
+    <p:dialog responsive="true" header="Eingabe neuer Kategorie" widgetVar="popupCategory" resizable="false"
+              modal="true" onHide="">
+        <h:form id="newCategory">
+            <p:outputLabel value="Kategorie bereits vorhanden. Bitte einen anderen Name eingeben."
+                           rendered="#{recipeCreatorController.categoryDuplicate}"/>
+            <br/>
+            <p:outputLabel for="newCategoryName" value="Kategorie Name:"/>
+            <p:inputText id="newCategoryName" placeholder="Kategorie Name eingeben..."
+                         value="#{recipeCreatorController.newCategoryName}"/>
+            <p:commandButton value="Bestätige" action="#{recipeCreatorController.submitNewCategory()}"
+                             update="newRecipe"/>
+        </h:form>
+    </p:dialog>
+    <!-- Popup dialog for new ingredient -->
+    <p:dialog responsive="true" header="Eingabe neuer Zutat" widgetVar="popupIngredient" resizable="false" modal="true">
+        <h:form id="newIngredient">
+            <p:inputText value="#{recipeCreatorController.newIngredientQuantity}" placeholder="Menge eingeben"/>
+            <p:selectOneMenu id="newUnit" value="#{recipeCreatorController.selectedUnit}">
+                <c:selectItem itemLabel="-- Wähle eine Einheit --" itemValue=""/>
+                <c:selectItems value="#{recipeCreatorController.ingredientUnits}" var="newUnit"
+                               itemLabel="#{newUnit}" itemValue="#{newUnit}"/>
+            </p:selectOneMenu>
+            <p:inputText value="#{recipeCreatorController.newIngredientName}" placeholder="Zutat eingeben"/>
+            <p:commandButton value="Bestätige" action="#{recipeCreatorController.addIngredient()}"
+                             update="newRecipe"/>
+        </h:form>
+    </p:dialog>
+</h:body>
+</html>
