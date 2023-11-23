@@ -49,14 +49,14 @@
                 <p:commandButton value="Neue Kategorie" oncomplete="PF('popupCategory').show()" icon="pi pi-plus-circle"
                                  styleClass="round-icon"/>
             </p:panelGrid>
-            <h:outputLabel for="ingredientList" value="Zutaten:"/>
 
+            <h:outputLabel for="ingredientList" value="Zutaten:"/>
             <p:panelGrid columns="2" columnClasses="value, action">
                 <p:dataList id="ingredientList" type="none" value="#{recipeCreatorController.recipeIngredients}"
                             var="ingredient">
                     <p:panelGrid columns="3" columnClasses="quantity, unit, name">
                         <p:inputText value="#{ingredient.quantity}"/>
-                        <p:selectOneMenu id="unit" value="#{ingredient.unit}" converter="ingredientConverter">
+                        <p:selectOneMenu id="unit" value="#{ingredient.unit}">
                             <c:selectItem itemLabel="#{ingredient.unit.name()}" itemValue="#{ingredient.unit}"/>
                             <c:selectItems value="#{recipeCreatorController.ingredientUnits}" var="unitValue"
                                            itemLabel="#{unitValue}" itemValue="#{unitValue}"/>
@@ -67,21 +67,33 @@
                 <p:commandButton value="Neue Zutat" oncomplete="PF('popupIngredient').show()" icon="pi pi-plus-circle"
                                  styleClass="round-icon"/>
             </p:panelGrid>
+
+            <p:outputLabel for="descriptionList" value="Anleitung: "/>
+            <p:panelGrid columns="2" columnClasses="input, action">
+                <p:dataList id="descriptionList" type="none" value="#{recipeCreatorController.recipeInstructions}"
+                            var="instruction">
+                    <p:panelGrid columns="1" columnClasses="description">
+                    <p:inputText value="#{instruction.instructionText}"/>
+                    </p:panelGrid>
+                </p:dataList>
+                <p:commandButton value="Neue Beschreibung" oncomplete="PF('popupInstruction').show()" icon="pi pi-plus-circle"
+                                 styleClass="round-icon"/>
+            </p:panelGrid>
         </p:panelGrid>
     </h:form>
 
-    <!-- <p:commandButton value="Submit" action="#{yourManagedBean.submit}"/> -->
+<!--    &lt;!&ndash; <p:commandButton value="Submit" action="#{yourManagedBean.submit}"/> &ndash;&gt;-->
     <!-- Popup dialog for new category-->
     <p:dialog responsive="true" header="Eingabe neuer Kategorie" widgetVar="popupCategory" resizable="false"
               modal="true" onHide="">
         <h:form id="newCategory">
             <p:outputLabel value="Kategorie bereits vorhanden. Bitte einen anderen Name eingeben."
-                           rendered="#{recipeCreatorController.categoryDuplicate}"/>
+                           rendered="#{recipeCreatorController.isCategoryDuplicate}"/>
             <br/>
             <p:outputLabel for="newCategoryName" value="Kategorie Name:"/>
             <p:inputText id="newCategoryName" placeholder="Kategorie Name eingeben..."
                          value="#{recipeCreatorController.newCategoryName}"/>
-            <p:commandButton value="Bestätige" action="#{recipeCreatorController.submitNewCategory()}"
+            <p:commandButton value="Bestätige" action="#{recipeCreatorController.addCategory()}"
                              update="newRecipe"/>
         </h:form>
     </p:dialog>
@@ -96,6 +108,15 @@
             </p:selectOneMenu>
             <p:inputText value="#{recipeCreatorController.newIngredientName}" placeholder="Zutat eingeben"/>
             <p:commandButton value="Bestätige" action="#{recipeCreatorController.addIngredient()}"
+                             update="newRecipe"/>
+        </h:form>
+    </p:dialog>
+    <!-- Popup dialog for new instruction -->
+    <p:dialog responsive="true" header="Eingabe neuer Anweisung" widgetVar="popupInstruction" resizable="false"
+              modal="true">
+        <h:form id="newInstruction">
+            <p:inputText value="#{recipeCreatorController.newInstruction}" placeholder="Anweisung eingeben.."/>
+            <p:commandButton value="Bestätige" action="#{recipeCreatorController.addInstruction()}"
                              update="newRecipe"/>
         </h:form>
     </p:dialog>

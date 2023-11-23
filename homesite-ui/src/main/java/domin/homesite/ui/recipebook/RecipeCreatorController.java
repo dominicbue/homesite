@@ -3,9 +3,10 @@ package domin.homesite.ui.recipebook;
 import domin.homesite.gil.domain.Category;
 import domin.homesite.gil.domain.Ingredient;
 import domin.homesite.gil.domain.IngredientsUnit;
+import domin.homesite.gil.domain.Instruction;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,25 +14,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "recipeCreatorController")
 public class RecipeCreatorController implements Serializable {
 
 
     private String recipeName;
     private Category recipeCategory;
-
-    private List<Category> persistedCategories;
+    private String newCategoryName;
     private boolean isCategoryDuplicate;
-
+    private List<Category> persistedCategories;
     private List<Ingredient> recipeIngredients;
     private String newIngredientName;
     private String newIngredientQuantity;
     private String selectedUnit;
 
-
-
-
+    private List<Instruction> recipeInstructions;
+    private String newInstruction;
 
 
     public RecipeCreatorController() {
@@ -39,25 +38,24 @@ public class RecipeCreatorController implements Serializable {
         Category category2 = Category.builder().categoryId("cat02").categoryName("Abendessen").build();
         persistedCategories = Arrays.asList(category1, category2);
         recipeIngredients = new ArrayList<>();
+        recipeInstructions = new ArrayList<>();
     }
 
-    public String getRecipeName() {
+    public String getRecipeName(){
         return recipeName;
     }
-
-    public void setRecipeName(String recipeName) {
-        this.recipeName = recipeName;
+    public void setRecipeName(String newRecipeName){
+        this.recipeName = newRecipeName;
     }
 
     public Category getRecipeCategory() {
-        if(recipeCategory == null){
+        if (recipeCategory == null) {
             return Category.builder().categoryId(null).categoryName("-- Wähle eine Kategorie --").build();
         }
         return recipeCategory;
     }
-
-    public void setRecipeCategory(Category recipeCategory) {
-        this.recipeCategory = recipeCategory;
+    public void setRecipeCategory(Category selectedCategory) {
+        this.recipeCategory = selectedCategory;
     }
 
     public void setNewCategoryName(String newCategoryName) {
@@ -65,55 +63,84 @@ public class RecipeCreatorController implements Serializable {
             isCategoryDuplicate = true;
         } else {
             isCategoryDuplicate = false;
+            this.newCategoryName = newCategoryName;
             this.recipeCategory = Category.builder().categoryId(null).categoryName(newCategoryName).build();
         }
     }
-
-    public boolean isCategoryDuplicate() {
-        return isCategoryDuplicate;
+    public String getNewCategoryName() {
+        return this.newCategoryName;
     }
 
-    public String submitNewCategory() {
-        return null;
+    public boolean getIsCategoryDuplicate(){
+        return this.isCategoryDuplicate;
+    }
+    public void setIsCategoryDuplicate(boolean value){
+        this.isCategoryDuplicate = value;
     }
 
     public List<Category> getPersistedCategories() {
-        return persistedCategories;
+        return this.persistedCategories;
     }
-    public List<String> getIngredientUnits() {
-        return Arrays.stream(IngredientsUnit.values()).map(IngredientsUnit::getValue).collect(Collectors.toList());
-    }
-    public List<Ingredient> getRecipeIngredients(){
-        return recipeIngredients;
+    public void setPersistedCategories(List<Category> categories){
+        this.persistedCategories = categories;
     }
 
-
-    public void setNewIngredientName(String ingredientName){
-        this.newIngredientName = ingredientName;
+    public List<Ingredient> getRecipeIngredients() {
+        return this.recipeIngredients;
+    }
+    public void setRecipeIngredients(List<Ingredient> ingredients){
+        this.recipeIngredients = ingredients;
     }
 
-    public String getNewIngredientName() {
-        return newIngredientName;
+    public String getNewIngredientName(){
+        return this.newIngredientName;
+    }
+    public void setNewIngredientName(String name) {
+        this.newIngredientName = name;
     }
 
+    public String getNewIngredientQuantity(){
+        return this.newIngredientQuantity;
+    }
     public void setNewIngredientQuantity(String quantity){
         this.newIngredientQuantity = quantity;
     }
 
-    public String getNewIngredientQuantity() {
-        return newIngredientQuantity;
+    public String getSelectedUnit(){
+        return this.selectedUnit;
+    }
+    public void setSelectedUnit(String unitName){
+        this.selectedUnit = unitName;
     }
 
-    public void setSelectedUnit(String selectedUnit){
-        this.selectedUnit = selectedUnit;
+    public List<Instruction> getRecipeInstructions(){
+        return this.recipeInstructions;
+    }
+    public void setRecipeInstructions(List<Instruction> instructions){
+        this.recipeInstructions = instructions;
     }
 
-    public String getSelectedUnit() {
-        return selectedUnit;
+    public String getNewInstruction(){
+        return this.newInstruction;
     }
+    public void setNewInstruction(String newInstruction){
+        this.newInstruction = newInstruction;
+    }
+
+    /*
+    Methoden die ohne Attribute arbeiten. (z.B. actions von CommandButtons)
+     */
+    public String addCategory(){
+        return null;
+    }
+
+    public List<String> getIngredientUnits() {
+        return Arrays.stream(IngredientsUnit.values()).map(IngredientsUnit::getValue).collect(Collectors.toList());
+    }
+
 
     public String addIngredient() {
-        if(newIngredientQuantity == null || selectedUnit == null || newIngredientName == null){
+        if (newIngredientQuantity == null || selectedUnit == null || newIngredientName == null) {
             return null;
         }
         Ingredient newIngredient = Ingredient.builder()
@@ -122,6 +149,15 @@ public class RecipeCreatorController implements Serializable {
                 .ingredientName(newIngredientName)
                 .build();
         recipeIngredients.add(newIngredient);
+        return null;
+    }
+
+    public String addInstruction() {
+        Instruction addedInstruction = Instruction.builder()
+                .instructionId(null)
+                .instructionText(newInstruction)
+                .build();
+        recipeInstructions.add(addedInstruction);
         return null;
     }
 }
