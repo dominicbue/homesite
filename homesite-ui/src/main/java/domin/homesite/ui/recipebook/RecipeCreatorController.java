@@ -153,6 +153,9 @@ public class RecipeCreatorController implements Serializable {
     }
 
     public String addInstruction() {
+        if(newInstruction == null) {
+            return null;
+        }
         Instruction addedInstruction = Instruction.builder()
                 .instructionId(null)
                 .instructionText(newInstruction)
