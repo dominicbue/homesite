@@ -38,11 +38,11 @@
             <h:outputLabel for="recipeName" value="Rezept Titel:"/>
             <p:inputText id="recipeName" placeholder="Rezpet Titel eingeben"
                          value="#{recipeCreatorController.recipeName}"/>
+
             <h:outputLabel for="category" value="Kategorie:"/>
             <p:panelGrid columns="2" columnClasses="value, actionIcon">
-                <p:selectOneMenu id="category" value="#{recipeCreatorController.recipeCategory}"
-                                 converter="categoryConverter">
-                    <c:selectItem itemValue="#{recipeCreatorController.recipeCategory}" itemLabel="#{recipeCreatorController.recipeCategory.categoryName}"/>
+                <p:selectOneMenu id="category" value="#{recipeCreatorController.recipeCategory}" converter="categoryConverter">
+                    <c:selectItem itemValue="#{null}" itemLabel="-- Wähle eine Kategorie --"/>
                     <c:selectItems value="#{recipeCreatorController.persistedCategories}" var="cat"
                                    itemLabel="#{cat.categoryName}" itemValue="#{cat}"/>
                 </p:selectOneMenu>
@@ -80,6 +80,8 @@
                                  styleClass="round-icon"/>
             </p:panelGrid>
         </p:panelGrid>
+        <br/>
+        <p:commandButton value="Rezept speichern" action="#{recipeCreatorController.saveRecipe}" />
     </h:form>
 
 <!--    &lt;!&ndash; <p:commandButton value="Submit" action="#{yourManagedBean.submit}"/> &ndash;&gt;-->

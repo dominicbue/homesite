@@ -1,9 +1,6 @@
 package domin.homesite.ui.recipebook;
 
-import domin.homesite.gil.domain.Category;
-import domin.homesite.gil.domain.Ingredient;
-import domin.homesite.gil.domain.IngredientsUnit;
-import domin.homesite.gil.domain.Instruction;
+import domin.homesite.gil.domain.*;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -48,11 +45,7 @@ public class RecipeCreatorController implements Serializable {
         this.recipeName = newRecipeName;
     }
 
-    public Category getRecipeCategory() {
-        if (recipeCategory == null) {
-            return Category.builder().categoryId(null).categoryName("-- Wähle eine Kategorie --").build();
-        }
-        return recipeCategory;
+    public Category getRecipeCategory() { return recipeCategory;
     }
     public void setRecipeCategory(Category selectedCategory) {
         this.recipeCategory = selectedCategory;
@@ -161,6 +154,20 @@ public class RecipeCreatorController implements Serializable {
                 .instructionText(newInstruction)
                 .build();
         recipeInstructions.add(addedInstruction);
+        return null;
+    }
+
+    public String saveRecipe() {
+        RecipeHeader recipeHeader = RecipeHeader.builder()
+                .recipeId(null)
+                .recipeTitle(recipeName)
+                .recipePicture(null)
+                .recipeCategory(recipeCategory)
+                .build();
+        RecipeData recipeData = RecipeData.builder()
+                .ingredients(recipeIngredients)
+                .instructions(recipeInstructions)
+                .build();
         return null;
     }
 }

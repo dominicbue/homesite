@@ -30,20 +30,6 @@ class RecipeCreatorControllerTest {
     }
 
     @Test
-    public void getRecipeCategory_when_recipeCategoryIsNull_then_returnCategoryMitWahl(){
-        //arrange
-        testee.setRecipeCategory(null);
-
-        //act
-        Category result = testee.getRecipeCategory();
-
-        //assert
-        assertNotNull(result);
-        assertNull(result.getCategoryId());
-        assertEquals(CHOOSE_CATEGORY, result.getCategoryName());
-    }
-
-    @Test
     public void getRecipeCategory_when_recipeCategoryExist_then_returnCategory(){
         //arrange
         Category expected = Category.builder()
