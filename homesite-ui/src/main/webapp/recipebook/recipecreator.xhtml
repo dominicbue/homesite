@@ -81,10 +81,9 @@
             </p:panelGrid>
         </p:panelGrid>
         <br/>
-        <p:commandButton value="Rezept speichern" action="#{recipeCreatorController.saveRecipe}" />
+        <p:commandButton value="Rezept speichern" action="#{recipeCreatorController.saveRecipe()}" ajax="false"/>
     </h:form>
 
-<!--    &lt;!&ndash; <p:commandButton value="Submit" action="#{yourManagedBean.submit}"/> &ndash;&gt;-->
     <!-- Popup dialog for new category-->
     <p:dialog responsive="true" header="Eingabe neuer Kategorie" widgetVar="popupCategory" resizable="false"
               modal="true" onHide="">
