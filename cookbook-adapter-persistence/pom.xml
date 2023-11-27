@@ -6,7 +6,7 @@
     <parent>
         <artifactId>homesite</artifactId>
         <groupId>domin.homesite</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
 
@@ -53,16 +53,6 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.19.0</version>
-        </dependency>
-
-        <!-- Scope Test -->
-        <dependency>
-            <groupId>domin.homesite</groupId>
-            <artifactId>cookbook-recipe-management</artifactId>
-            <version>${project.parent.version}</version>
-            <classifier>tests</classifier>
-            <type>test-jar</type>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>

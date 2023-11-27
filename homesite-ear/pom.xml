@@ -6,7 +6,7 @@
     <parent>
         <groupId>domin.homesite</groupId>
         <artifactId>homesite</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>homesite-ear</artifactId>
@@ -23,23 +23,23 @@
         <dependency>
             <groupId>domin.homesite</groupId>
             <artifactId>cookbook-adapter-persistence</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>domin.homesite</groupId>
             <artifactId>cookbook-recipe-management</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>domin.homesite</groupId>
             <artifactId>homesite-gil</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>domin.homesite</groupId>
             <artifactId>homesite-ui</artifactId>
             <type>war</type>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 
