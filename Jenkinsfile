@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+            MAVEN_HOME = tool 'Maven'
+            PATH = "$MAVEN_HOME/bin:$PATH"
+        }
+
     stages {
         stage('Continuous-Build') {
             steps {
