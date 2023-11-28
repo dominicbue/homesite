@@ -4,7 +4,7 @@
 
     <groupId>domin.homesite</groupId>
     <artifactId>homesite</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -93,7 +93,7 @@
     <scm>
         <connection>scm:git:https://github.com/dominicbue/homesite</connection>
         <developerConnection>scm:git:https://github.com/dominicbue/homesite</developerConnection>
-      <tag>initial_release</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <build>
