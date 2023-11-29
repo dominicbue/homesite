@@ -1,36 +1,40 @@
 package domin.homesite.ui.recipebook;
 
+import domin.homesite.gil.application.RecipeHandler;
 import domin.homesite.gil.domain.Category;
 import domin.homesite.gil.domain.IngredientsUnit;
-import org.junit.jupiter.api.BeforeEach;
+import domin.homesite.gil.domain.RecipeHeader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RecipeCreatorControllerTest {
 
-    public static final String CHOOSE_CATEGORY = "-- Wähle eine Kategorie --";
     public static final String TEST_CATEGORY_ID = "testCat";
     public static final String TEST_CATEGORY_NAME = "Dies ist ein Test";
     public static final String INGREDIENT_NAME_MEHL = "Mehl";
     public static final String INGREDIENT_UNIT_GRAMM = IngredientsUnit.GRAMM.value;
     public static final String QUANTITY_400 = "400";
     public static final String INSTRUCTION_TEST = "Der Test wird es zeigen.";
+
+
+    @Mock
+    private RecipeHandler recipeHandler;
+    @InjectMocks
     private RecipeCreatorController testee;
 
-    @BeforeEach
-    void init(){
-        testee = new RecipeCreatorController();
-    }
-
     @Test
-    public void getRecipeCategory_when_recipeCategoryExist_then_returnCategory(){
+    public void getRecipeCategory_when_recipeCategoryExist_then_returnCategory() {
         //arrange
         Category expected = Category.builder()
                 .categoryId(TEST_CATEGORY_ID)
@@ -48,8 +52,13 @@ class RecipeCreatorControllerTest {
     }
 
     @Test
-    public void setNewCategoryName_when_inputStringIsNull_then_newCategoryNameIsNull(){
+    public void setNewCategoryName_when_inputStringIsNull_then_newCategoryNameIsNull() {
         //arrange
+        Category category = Category.builder()
+                .categoryId("cat01")
+                .categoryName("KategorieTest")
+                .build();
+        testee.setPersistedCategories(Collections.singletonList(category));
 
         //act
         testee.setNewCategoryName(null);
@@ -59,7 +68,7 @@ class RecipeCreatorControllerTest {
     }
 
     @Test
-    public void setNewCategoryName_when_inputStringWithNameNotDuplicate_then_newNameIsSetAndDuplicateFalse(){
+    public void setNewCategoryName_when_inputStringWithNameNotDuplicate_then_newNameIsSetAndDuplicateFalse() {
         //arrange
         Category fruehstueck = Category.builder().categoryId("cat01").categoryName("Frühstück").build();
         Category dessert = Category.builder().categoryId("cat02").categoryName("Dessert").build();
@@ -77,7 +86,7 @@ class RecipeCreatorControllerTest {
     }
 
     @Test
-    public void setNewCategoryName_when_inputStringWithNameDuplicate_then_duplicateTrueAndNewNameIsNull(){
+    public void setNewCategoryName_when_inputStringWithNameDuplicate_then_duplicateTrueAndNewNameIsNull() {
         //arrange
         Category fruehstueck = Category.builder().categoryId("cat01").categoryName("Frühstück").build();
         Category dessert = Category.builder().categoryId("cat02").categoryName("Dessert").build();
@@ -160,7 +169,7 @@ class RecipeCreatorControllerTest {
     }
 
     @Test
-    public void addInstruction_when_newInstructionIsNull_then_returnNull(){
+    public void addInstruction_when_newInstructionIsNull_then_returnNull() {
         //arrange
 
         //act
@@ -173,7 +182,7 @@ class RecipeCreatorControllerTest {
     }
 
     @Test
-    public void addInstruction_when_newInstructionIsSet_then_addInstructionToRecipeInstructionsAndReturnNull(){
+    public void addInstruction_when_newInstructionIsSet_then_addInstructionToRecipeInstructionsAndReturnNull() {
         //arrange
         testee.setNewInstruction(INSTRUCTION_TEST);
 
@@ -184,6 +193,42 @@ class RecipeCreatorControllerTest {
         assertEquals(INSTRUCTION_TEST, testee.getNewInstruction());
         assertEquals(1, testee.getRecipeInstructions().size());
         assertNull(result);
+    }
+
+    @Test
+    public void getPersistedCategories_when_noPersistedCategoriesInDB_then_returnEmptyListl() {
+        //arrange
+        when(recipeHandler.getAllRecipeHeaders()).thenReturn(null);
+
+        //act
+        List<Category> result = testee.getPersistedCategories();
+
+        //assert
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void getPersistedCategories_when_oneCategoryIsPersisted_then_returnCategory() {
+        //arrange
+        Category category = Category.builder()
+                .categoryId(TEST_CATEGORY_ID)
+                .categoryName(TEST_CATEGORY_NAME)
+                .build();
+        RecipeHeader recipeHeader = RecipeHeader.builder()
+                .recipeId("rec01")
+                .recipeTitle("RecipeTest")
+                .recipePicture(null)
+                .recipeCategory(category)
+                .build();
+        when(recipeHandler.getAllRecipeHeaders()).thenReturn(Collections.singletonList(recipeHeader));
+
+        //act
+        List<Category> result = testee.getPersistedCategories();
+
+        //assert
+        assertEquals(1, result.size());
+        assertEquals(TEST_CATEGORY_ID, result.get(0).getCategoryId());
+        assertEquals(TEST_CATEGORY_NAME, result.get(0).getCategoryName());
     }
 
 }

@@ -1,9 +1,11 @@
 package domin.homesite.ui.recipebook;
 
+import domin.homesite.gil.application.RecipeHandler;
 import domin.homesite.gil.domain.*;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,8 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@ViewScoped
-@ManagedBean(name = "recipeCreatorController")
+@SessionScoped
+@Named(value = "recipeCreatorController")
 public class RecipeCreatorController implements Serializable {
 
 
@@ -30,23 +32,28 @@ public class RecipeCreatorController implements Serializable {
     private String newInstruction;
 
 
+    @Inject
+    private RecipeHandler recipeHandler;
+
+    
     public RecipeCreatorController() {
-        Category category1 = Category.builder().categoryId("cat01").categoryName("Frühstück").build();
-        Category category2 = Category.builder().categoryId("cat02").categoryName("Abendessen").build();
-        persistedCategories = Arrays.asList(category1, category2);
-        recipeIngredients = new ArrayList<>();
-        recipeInstructions = new ArrayList<>();
+        this.persistedCategories = new ArrayList<>();
+        this.recipeIngredients = new ArrayList<>();
+        this.recipeInstructions = new ArrayList<>();
     }
 
-    public String getRecipeName(){
+    public String getRecipeName() {
         return recipeName;
     }
-    public void setRecipeName(String newRecipeName){
+
+    public void setRecipeName(String newRecipeName) {
         this.recipeName = newRecipeName;
     }
 
-    public Category getRecipeCategory() { return recipeCategory;
+    public Category getRecipeCategory() {
+        return recipeCategory;
     }
+
     public void setRecipeCategory(Category selectedCategory) {
         this.recipeCategory = selectedCategory;
     }
@@ -60,70 +67,85 @@ public class RecipeCreatorController implements Serializable {
             this.recipeCategory = Category.builder().categoryId(null).categoryName(newCategoryName).build();
         }
     }
+
     public String getNewCategoryName() {
         return this.newCategoryName;
     }
 
-    public boolean getIsCategoryDuplicate(){
+    public boolean getIsCategoryDuplicate() {
         return this.isCategoryDuplicate;
     }
-    public void setIsCategoryDuplicate(boolean value){
+
+    public void setIsCategoryDuplicate(boolean value) {
         this.isCategoryDuplicate = value;
     }
 
     public List<Category> getPersistedCategories() {
-        return this.persistedCategories;
+        List<RecipeHeader> persistedHeaders = recipeHandler.getAllRecipeHeaders();
+        if(persistedHeaders != null) {
+            this.persistedCategories = persistedHeaders.stream()
+                    .map(RecipeHeader::getRecipeCategory)
+                    .collect(Collectors.toList());
+        }
+        return persistedCategories;
     }
-    public void setPersistedCategories(List<Category> categories){
+
+    public void setPersistedCategories(List<Category> categories) {
         this.persistedCategories = categories;
     }
 
     public List<Ingredient> getRecipeIngredients() {
         return this.recipeIngredients;
     }
-    public void setRecipeIngredients(List<Ingredient> ingredients){
+
+    public void setRecipeIngredients(List<Ingredient> ingredients) {
         this.recipeIngredients = ingredients;
     }
 
-    public String getNewIngredientName(){
+    public String getNewIngredientName() {
         return this.newIngredientName;
     }
+
     public void setNewIngredientName(String name) {
         this.newIngredientName = name;
     }
 
-    public String getNewIngredientQuantity(){
+    public String getNewIngredientQuantity() {
         return this.newIngredientQuantity;
     }
-    public void setNewIngredientQuantity(String quantity){
+
+    public void setNewIngredientQuantity(String quantity) {
         this.newIngredientQuantity = quantity;
     }
 
-    public String getSelectedUnit(){
+    public String getSelectedUnit() {
         return this.selectedUnit;
     }
-    public void setSelectedUnit(String unitName){
+
+    public void setSelectedUnit(String unitName) {
         this.selectedUnit = unitName;
     }
 
-    public List<Instruction> getRecipeInstructions(){
+    public List<Instruction> getRecipeInstructions() {
         return this.recipeInstructions;
     }
-    public void setRecipeInstructions(List<Instruction> instructions){
+
+    public void setRecipeInstructions(List<Instruction> instructions) {
         this.recipeInstructions = instructions;
     }
 
-    public String getNewInstruction(){
+    public String getNewInstruction() {
         return this.newInstruction;
     }
-    public void setNewInstruction(String newInstruction){
+
+    public void setNewInstruction(String newInstruction) {
         this.newInstruction = newInstruction;
     }
 
     /*
     Methoden die ohne Attribute arbeiten. (z.B. actions von CommandButtons)
      */
-    public String addCategory(){
+    public String addCategory() {
         return null;
     }
 
@@ -146,7 +168,7 @@ public class RecipeCreatorController implements Serializable {
     }
 
     public String addInstruction() {
-        if(newInstruction == null) {
+        if (newInstruction == null) {
             return null;
         }
         Instruction addedInstruction = Instruction.builder()
@@ -168,6 +190,7 @@ public class RecipeCreatorController implements Serializable {
                 .ingredients(recipeIngredients)
                 .instructions(recipeInstructions)
                 .build();
+        recipeHandler.persistRecipeFromUi(recipeHeader, recipeData);
         return null;
     }
 }
