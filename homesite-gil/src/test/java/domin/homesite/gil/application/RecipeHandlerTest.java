@@ -3,9 +3,9 @@ package domin.homesite.gil.application;
 import domin.homesite.gil.adapter.recipemanagement.RecipeManagementAdapterImpl;
 import domin.homesite.gil.domain.Recipe;
 import domin.homesite.gil.domain.RecipeHeader;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -23,12 +23,8 @@ class RecipeHandlerTest {
     @Mock
     private RecipeManagementAdapterImpl recipeManagementAdapter;
 
-    private RecipeHandler testee;
-
-    @BeforeEach
-    void setUp() {
-        testee = new RecipeHandler(recipeManagementAdapter);
-    }
+    @InjectMocks
+    private RecipeHandler testee = new RecipeHandler();
 
     @Test
     void getAllRecipeHeaders_whenEmptyRecipeList_thenReturnEmptyList(){
