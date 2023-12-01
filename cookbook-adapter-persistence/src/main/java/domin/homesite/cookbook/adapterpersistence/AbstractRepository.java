@@ -1,15 +1,16 @@
 package domin.homesite.cookbook.adapterpersistence;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import java.util.Optional;
 
 
 public abstract class AbstractRepository<E> {
 
-    @PersistenceContext(name = "recipemanagment")
-    private EntityManager em;
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("recipemanagment");
+    private EntityManager em = emf.createEntityManager();
 
     protected AbstractRepository() {}
     protected void setEntityManager(EntityManager entityManager) {
