@@ -1,0 +1,109 @@
+pipeline {
+    agent any
+
+    environment {
+        GIT_USER = 'dominicbue'
+        GIT_EMAIL = 'dominic_bue@gmx.ch'
+        GIT_CREDENTIALS_ID = 'git_credentials'  // Replace with your actual Jenkins credentials ID
+        GIT_REPO_URL = 'https://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@github.com/dominicbue/homesite.git'
+        EXISTING_JOB_NAME = 'Continuous-Build/master'
+        MAVEN_HOME = tool 'Maven'  // Ensure that Maven is configured in Jenkins as a tool
+    }
+
+    stages {
+        /*stage('Trigger Continuous-Build') {
+            steps {
+                script {
+                    // Trigger the existing Jenkins job
+                    def triggeredJob = build job: "${EXISTING_JOB_NAME}", wait: true
+                    if (triggeredJob.result == 'SUCCESS') {
+                        echo "${EXISTING_JOB_NAME} was successful."
+                    } else {
+                        error "${EXISTING_JOB_NAME} failed. Stopping the pipeline."
+                    }
+                }
+            }
+        } */
+
+        stage('Set Git Config') {
+            steps {
+                script {
+                    cleanWs()
+                    checkout scm
+                    // Set Git configurations for this stage
+                    sh "git config user.name ${GIT_USER}"
+                    sh "git config user.email ${GIT_EMAIL}"
+
+                }
+            }
+        }
+
+        stage('Checkout') {
+            steps {
+                script {
+                    // Your checkout steps here
+                    withCredentials([usernamePassword(credentialsId: GIT_CREDENTIALS_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                        checkout([
+                            $class: 'GitSCM',
+                            branches: [[name: '*/master']],
+                            doGenerateSubmoduleConfigurations: false,
+                            extensions: [],
+                            submoduleCfg: [],
+                            userRemoteConfigs: [[url: GIT_REPO_URL]]
+                            ])
+                    }
+                    echo "Repo-URL: ${GIT_REPO_URL}"
+                    // Read the current snapshot version from the POM file
+                    def pomFile = readFile('homesite/pom.xml')
+                    def matcher = pomFile =~ '<version>(.+)-SNAPSHOT</version>'
+                    if (matcher) {
+                        def snapshotVersion = matcher[0][1]
+                        echo "Current Snapshot Version: ${snapshotVersion}"
+                    } else {
+                        error "Failed to extract snapshot version from POM file."
+                    }
+                }
+            }
+        }
+
+        stage('Release-Build') {
+            steps {
+                script {
+                    // Maven Release Plugin steps
+                    sh "${MAVEN_HOME}/bin/mvn release:prepare release:perform"
+
+                    // Commit and push the changes
+                    withCredentials([usernamePassword(credentialsId: GIT_CREDENTIALS_ID, passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                        sh 'git add .'
+                        sh 'git commit -m "Release ${RELEASE_VERSION}"'
+                        sh 'git push origin master'
+                    }
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                script {
+                    // Your test steps here
+                    sh "${MAVEN_HOME}/bin/mvn test"
+                }
+            }
+        }
+
+        // Add more stages as needed
+
+    }
+
+    post {
+        failure {
+            script {
+                // Revert uncommitted changes on failure
+                sh 'git clean -xdf'
+            }
+        }
+        always {
+            echo 'Pipeline completed!'
+        }
+    }
+}
