@@ -4,7 +4,7 @@
     <parent>
         <artifactId>homesite</artifactId>
         <groupId>domin.homesite</groupId>
-        <version>homesite-1.0.3-SNAPSHOT</version>
+        <version>homesite-1.0.4</version>
     </parent>
 
 
