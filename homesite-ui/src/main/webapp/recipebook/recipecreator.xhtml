@@ -15,6 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </h:head>
 <h:body styleClass="body">
+    <!--@elvariable id="recipeCreatorController" type="domin.homesite.ui.recipebook.RecipeCreatorController"-->
     <p:toolbar>
         <c:facet name="left">
             <h:link rendered="true" outcome="../index.xhtml">
@@ -91,7 +92,7 @@
             <p:outputLabel value="Kategorie bereits vorhanden. Bitte einen anderen Name eingeben."
                            rendered="#{recipeCreatorController.isCategoryDuplicate}"/>
             <br/>
-            <p:outputLabel for="newCategoryName" value="Kategorie Name:"/>
+            <p:outputLabel for="newCategoryName" value="Kategorie Name: "/>
             <p:inputText id="newCategoryName" placeholder="Kategorie Name eingeben..."
                          value="#{recipeCreatorController.newCategoryName}"/>
             <p:commandButton value="Bestätige" action="#{recipeCreatorController.addCategory()}"

@@ -2,6 +2,7 @@ package domin.homesite.ui.recipebook;
 
 import domin.homesite.gil.application.RecipeHandler;
 import domin.homesite.gil.domain.*;
+import lombok.Getter;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
@@ -14,21 +15,30 @@ import java.util.stream.Collectors;
 
 
 @SessionScoped
-@Named(value = "recipeCreatorController")
+@Named
 public class RecipeCreatorController implements Serializable {
 
 
+    @Getter
     private String recipeName;
+    @Getter
     private Category recipeCategory;
+    @Getter
     private String newCategoryName;
     private boolean isCategoryDuplicate;
     private List<Category> persistedCategories;
+    @Getter
     private List<Ingredient> recipeIngredients;
+    @Getter
     private String newIngredientName;
+    @Getter
     private String newIngredientQuantity;
+    @Getter
     private String selectedUnit;
 
+    @Getter
     private List<Instruction> recipeInstructions;
+    @Getter
     private String newInstruction;
 
 
@@ -42,16 +52,8 @@ public class RecipeCreatorController implements Serializable {
         this.recipeInstructions = new ArrayList<>();
     }
 
-    public String getRecipeName() {
-        return recipeName;
-    }
-
     public void setRecipeName(String newRecipeName) {
         this.recipeName = newRecipeName;
-    }
-
-    public Category getRecipeCategory() {
-        return recipeCategory;
     }
 
     public void setRecipeCategory(Category selectedCategory) {
@@ -64,20 +66,12 @@ public class RecipeCreatorController implements Serializable {
         } else {
             isCategoryDuplicate = false;
             this.newCategoryName = newCategoryName;
-            this.recipeCategory = Category.builder().categoryId(null).categoryName(newCategoryName).build();
+            this.recipeCategory = Category.builder().categoryId("new").categoryName(newCategoryName).build();
         }
-    }
-
-    public String getNewCategoryName() {
-        return this.newCategoryName;
     }
 
     public boolean getIsCategoryDuplicate() {
         return this.isCategoryDuplicate;
-    }
-
-    public void setIsCategoryDuplicate(boolean value) {
-        this.isCategoryDuplicate = value;
     }
 
     public List<Category> getPersistedCategories() {
@@ -94,48 +88,24 @@ public class RecipeCreatorController implements Serializable {
         this.persistedCategories = categories;
     }
 
-    public List<Ingredient> getRecipeIngredients() {
-        return this.recipeIngredients;
-    }
-
     public void setRecipeIngredients(List<Ingredient> ingredients) {
         this.recipeIngredients = ingredients;
-    }
-
-    public String getNewIngredientName() {
-        return this.newIngredientName;
     }
 
     public void setNewIngredientName(String name) {
         this.newIngredientName = name;
     }
 
-    public String getNewIngredientQuantity() {
-        return this.newIngredientQuantity;
-    }
-
     public void setNewIngredientQuantity(String quantity) {
         this.newIngredientQuantity = quantity;
-    }
-
-    public String getSelectedUnit() {
-        return this.selectedUnit;
     }
 
     public void setSelectedUnit(String unitName) {
         this.selectedUnit = unitName;
     }
 
-    public List<Instruction> getRecipeInstructions() {
-        return this.recipeInstructions;
-    }
-
     public void setRecipeInstructions(List<Instruction> instructions) {
         this.recipeInstructions = instructions;
-    }
-
-    public String getNewInstruction() {
-        return this.newInstruction;
     }
 
     public void setNewInstruction(String newInstruction) {
