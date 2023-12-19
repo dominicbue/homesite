@@ -75,7 +75,7 @@
                 <version>3.3.2</version>
             </plugin>
         </plugins>
-        <finalName>homesite-ui</finalName>
+        <finalName>HomeSite</finalName>
     </build>
 
 </project>
