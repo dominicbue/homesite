@@ -47,11 +47,14 @@
                 <artifactId>maven-ear-plugin</artifactId>
                 <version>2.8</version>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                        </manifest>
-                    </archive>
+                    <modules>
+                        <webModule>
+                            <groupId>domin.homesite</groupId>
+                            <artifactId>homesite-ui</artifactId>
+                            <context-root>HomeSite</context-root>
+                            <bundleFileName>homesite-ui.war</bundleFileName>
+                        </webModule>
+                    </modules>
                 </configuration>
             </plugin>
         </plugins>
