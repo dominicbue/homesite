@@ -4,7 +4,7 @@
     <parent>
         <artifactId>homesite</artifactId>
         <groupId>domin.homesite</groupId>
-        <version>1.0.25</version>
+        <version>1.0.25-SNAPSHOT</version>
     </parent>
 
     <artifactId>cookbook-recipe-management</artifactId>
