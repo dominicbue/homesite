@@ -6,8 +6,8 @@
 
     <module>
         <web>
-            <web-uri>homesite-ui-1.0-SNAPSHOT.war</web-uri>
-            <context-root>HomeSite</context-root>
+            <web-uri>homesite-ui-${project.version}</web-uri>
+            <context-root>/HomeSite</context-root>
         </web>
     </module>
 </application>
