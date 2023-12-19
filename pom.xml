@@ -119,11 +119,7 @@
                     <version>8.0.15</version>
                     <configuration>
                         <tomeeVersion>8.0.15</tomeeVersion>
-
                         <tomeeClassifier>ear</tomeeClassifier>
-                        <tomeeSource>/var/lib/jenkins/.m2/repository/domin/homesite/homesite-ear/${project.version}/</tomeeSource>
-                        <context>homesite-ui</context>
-
                     </configuration>
                 </plugin>
             </plugins>
