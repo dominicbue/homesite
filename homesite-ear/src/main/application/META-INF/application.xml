@@ -6,7 +6,7 @@
 
     <module>
         <web>
-            <web-uri>homesite-ui-${project.version}</web-uri>
+            <web-uri>homesite-ui.war</web-uri>
             <context-root>/HomeSite</context-root>
         </web>
     </module>
